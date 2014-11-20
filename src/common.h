@@ -14,3 +14,11 @@ enum {
 
 const char* DEFAULT_SAVE_FILENAME = "/var/log/zebra.data";
 const char* DEFAULT_CONF_FILENAME = "/etc/zebra/zebra.conf";
+
+enum {
+	INFO,
+	DEBUG,
+	WARNING,
+	ERROR,
+	CRITICAL,
+};

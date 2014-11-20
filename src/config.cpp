@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <stdio.h>
 #include "config.h"
 #include "common.h"
 
@@ -9,14 +11,16 @@ configure::configure(const char* filename):
 	interval(COLLECT_INTERVAL),
 	modules_num(0),
 	print_mode(PRINT_SUMMARY),
-	save_file_name(DEFAULT_SAVE_FILENAME),
+	output_file_path(DEFAULT_SAVE_FILENAME),
 	db_ip(""),
 	db_port(0),
-	db_url("")
+	db_url(""),
+	debug_level(CRITICAL)
 {
 	enable_modules_list.clear();
 	db_module_list.clear();
 	confMap.clear();
+	output_interface.clear();
 	
 }
 
@@ -26,10 +30,10 @@ configure::~configure()
 	db_module_list.clear();
 }
 
-void configure::parse_config_file()
+void configure::parse_config_file(std::string path)
 {
 	std::string s;
-	std::ifstream fin(conf_name.c_str());
+	std::ifstream fin(path.c_str());
 	while(getline(fin,s))
 		getSplit(s,confMap);
 
@@ -98,7 +102,7 @@ void configure::parse_line()
 	for(; iter != confMap.end(); iter++)
 	{
 		std::string token = iter->first;
-		if(token.find("module_",0) != std::string::npos)
+		if(std::string::npos != token.find("module_",0))
 		{
 			parse_module(token,iter->second);	
 		}
@@ -106,11 +110,72 @@ void configure::parse_line()
 		{
 			continue;
 		}
+		else if(token == "output_interface")
+		{
+			if(iter->second.find("file"))
+				output_interface.push_back("file");
+			if(iter->second.find("db"))
+				output_interface.push_back("db");
+			if(iter->second.find("url"))
+				output_interface.push_back("url");
+		}
+		else if(token == "output_file_path")
+		{
+			output_file_path = iter->second;
+		}
+		else if(token == "output_db_module")
+		{
+
+		}
+		else if(token == "output_db_addr")
+		{
+			db_ip = iter->second;
+		}
+		else if(token == "output_db_port")
+		{
+			unsigned int dbport;
+			std::stringstream ss(iter->second);
+			ss>>dbport;
+			db_port = dbport; 
+		}
+		else if(token == "output_url")
+		{
+			db_url = iter->second;	
+		}
+		else if(token == "include")
+		{
+			get_include_conf(iter->second);
+		}
+
+
 	}
 
 }
 
+void configure::parse_module(std::string token,std::string value)
+{
+	if(value == "enable" || value == "on")
+	{
+		enable_modules_list.push_back(token);
+	}
+}
 
+void configure::parse_include_conf(std::string path)
+{
+	FILE* fs = NULL;
+	char buff[1024]={'\0'};
+	std::string cmd = "ls "+path;
+	cmd += " 2>/dev/null";
+	fs = popen(cmd.c_str(),"r");
+	if(NULL == fs)
+		return;
+	while(fgets(buff,sizeof(buff),fs))
+	{
+		std::string fullpath = path + std::string(buff);
+		parse_config_file(fullpath);
+	}
+
+}
 
 
 
