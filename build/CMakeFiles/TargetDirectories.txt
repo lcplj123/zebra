@@ -1,0 +1,3 @@
+/root/git/zebra/build/src/CMakeFiles/config_shared.dir
+/root/git/zebra/build/src/CMakeFiles/config_static.dir
+/root/git/zebra/build/src/CMakeFiles/zebra.dir

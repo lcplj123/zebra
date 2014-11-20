@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/root/git/zebra/src/common.h
+
+/root/git/zebra/src/config.cpp
+fstream
+-
+iostream
+-
+stdlib.h
+-
+stdio.h
+-
+config.h
+/root/git/zebra/src/config.h
+common.h
+/root/git/zebra/src/common.h
+
+/root/git/zebra/src/config.h
+string
+-
+vector
+-
+map
+-
+

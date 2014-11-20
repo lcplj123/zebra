@@ -141,7 +141,7 @@ void configure::parse_line()
 		{
 			output_file_path = iter->second;
 		}
-		else if(token == "output_db_module")
+		else if(token == "output_db_modules")
 		{
 			
 		}
@@ -231,7 +231,7 @@ void configure::debug_print()
 
 	
 }
-
+/*
 int main()
 {
 	configure f("/root/zebra.conf");
@@ -239,4 +239,4 @@ int main()
 	f.debug_print();
 	return 0;
 }
-
+*/
