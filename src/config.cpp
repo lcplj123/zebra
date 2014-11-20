@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include <sstream>
+#include <stdlib.h>
 #include <stdio.h>
 #include "config.h"
 #include "common.h"
@@ -10,12 +10,12 @@ configure::configure(const char* filename):
 	conf_name(filename),
 	interval(COLLECT_INTERVAL),
 	modules_num(0),
+	debug_level(CRITICAL),
 	print_mode(PRINT_SUMMARY),
 	output_file_path(DEFAULT_SAVE_FILENAME),
 	db_ip(""),
-	db_port(0),
-	db_url(""),
-	debug_level(CRITICAL)
+	db_port(3306),
+	db_url("")
 {
 	enable_modules_list.clear();
 	db_module_list.clear();
@@ -33,19 +33,23 @@ configure::~configure()
 void configure::parse_config_file(std::string path)
 {
 	std::string s;
-	std::ifstream fin(path.c_str());
+	if (path != "")
+		conf_name = path;
+	std::ifstream fin(conf_name.c_str());
 	while(getline(fin,s))
-		getSplit(s,confMap);
+		getSplit(s);
 
+	//parse every line
+	parse_line();
 	fin.close();
 }
 
-void configure::getSplit(const std::string& s,std::map<std::string,std::string>& mapconf)
+void configure::getSplit(const std::string& s)
 {
 	size_t pos = 0;
 	std::string trimstr = removeTrim(s);
 	std::string::const_iterator iter = trimstr.begin();
-	for(; iter != trimstr.begin(); iter++)
+	for(; iter != trimstr.end(); iter++)
 	{
 		if(*iter == ' ' || *iter == '	')
 			break;
@@ -56,7 +60,7 @@ void configure::getSplit(const std::string& s,std::map<std::string,std::string>&
 	std::string value = removeTrim(trimstr.substr(pos,trimstr.length()-pos));
 	if(key != "" && value != "")
 	{
-		mapconf.insert(std::make_pair(key,value));
+		confMap.insert(std::make_pair(key,value));
 	}
 }
 
@@ -93,7 +97,7 @@ size_t configure::getRightTrimPos(const std::string& s)
 		else
 			break;
 	}
-	return pos;
+	return s.length() - pos;
 }
 
 void configure::parse_line()
@@ -102,13 +106,27 @@ void configure::parse_line()
 	for(; iter != confMap.end(); iter++)
 	{
 		std::string token = iter->first;
-		if(std::string::npos != token.find("module_",0))
-		{
-			parse_module(token,iter->second);	
-		}
-		else if (0 == token.find("#",0))
+		//std::cout<<"key = "<<token<<"  value = "<<iter->second<<std::endl;
+		if (0 == token.find("#",0))
 		{
 			continue;
+		}
+		else if (token == "debug_level")
+		{
+			if(iter->second == "INFO")
+				debug_level = INFO;
+			else if(iter->second == "DEBUG")
+				debug_level = DEBUG;
+			else if(iter->second == "WARNING")
+				debug_level = WARNING;
+			else if(iter->second == "ERROR")
+				debug_level = ERROR;
+			else 
+				debug_level = CRITICAL;
+		}
+		else if(std::string::npos != token.find("module_",0))
+		{
+			parse_module(token,iter->second);	
 		}
 		else if(token == "output_interface")
 		{
@@ -125,7 +143,7 @@ void configure::parse_line()
 		}
 		else if(token == "output_db_module")
 		{
-
+			
 		}
 		else if(token == "output_db_addr")
 		{
@@ -133,10 +151,12 @@ void configure::parse_line()
 		}
 		else if(token == "output_db_port")
 		{
-			unsigned int dbport;
-			std::stringstream ss(iter->second);
-			ss>>dbport;
-			db_port = dbport; 
+			unsigned int dbport = 0;
+			dbport = atoi(iter->second.c_str());
+			if(dbport != 0)
+			{
+				db_port = dbport; 
+			}
 		}
 		else if(token == "output_url")
 		{
@@ -144,7 +164,7 @@ void configure::parse_line()
 		}
 		else if(token == "include")
 		{
-			get_include_conf(iter->second);
+			parse_include_conf(iter->second);
 		}
 
 
@@ -177,5 +197,46 @@ void configure::parse_include_conf(std::string path)
 
 }
 
+void configure::debug_print()
+{
+	std::cout<<"name: "<<conf_name<<std::endl;
+	std::cout<<"run_mode: "<<run_state<<std::endl;
+	std::cout<<"interval: "<<interval<<std::endl;
+	std::cout<<"enable_modules_list: ";
+	std::vector<std::string>::iterator iter1 = enable_modules_list.begin();
+	for(;iter1 != enable_modules_list.end(); iter1++)
+		std::cout<<"  "<<*iter1;
+	std::cout<<std::endl;
+	std::cout<<"debug_level: "<<debug_level<<std::endl;
+	std::cout<<"-----------mapConf----------"<<std::endl;
+	std::map<std::string,std::string>::iterator iter2 = confMap.begin();
+	for(; iter2 != confMap.end();iter2++)
+	{
+		std::cout<<iter2->first<<": "<<iter2->second<<std::endl;
+	}
+	std::cout<<"-----------mapConf end----------"<<std::endl;
+	std::cout<<"db_ip: "<<db_ip<<std::endl;
+	std::cout<<"db_port: "<<db_port<<std::endl;
+	std::cout<<"db_url: "<<db_url<<std::endl;
+	std::vector<std::string>::iterator iter3 = db_module_list.begin();
+	std::cout<<"db_module_list: ";
+	for(; iter3 != db_module_list.end(); iter3++)
+	{
+		std::cout<<"  "<<*iter3;
+	}
+	std::cout<<std::endl;
 
+	
+	
+
+	
+}
+
+int main()
+{
+	configure f("/root/zebra.conf");
+	f.parse_config_file();	
+	f.debug_print();
+	return 0;
+}
 

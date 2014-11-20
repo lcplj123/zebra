@@ -10,7 +10,8 @@ class configure
 public:
 	configure(const char* filename); /* construct */
 	~configure(); /* destruct */
-	void parse_config_file(std::string path); /* analyze the conf file */
+	void parse_config_file(std::string path = ""); /* analyze the conf file */
+	void debug_print();
 
 private:
 	int run_state; /* running mode */
@@ -42,7 +43,7 @@ private:
 	size_t getLeftTrimPos(const std::string& s); /* get left character position */
 	size_t getRightTrimPos(const std::string& s);  /* get right character position */
 	std::string removeTrim(const std::string& s); /* remove the giving string trim */
-	void getSplit(const std::string& s,std::map<std::string,std::string>& mapconf); /* get the item splited by space or tab */
+	void getSplit(const std::string& s); /* get the item splited by space or tab */
 	void parse_line();  /* parse every line option */
 	void parse_module(std::string token,std::string value); /* parse module item  */
 
