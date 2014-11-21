@@ -14,6 +14,9 @@ enum {
 
 const char* DEFAULT_SAVE_FILENAME = "/var/log/zebra.data";
 const char* DEFAULT_CONF_FILENAME = "/etc/zebra/zebra.conf";
+const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/";
+const char* STAT = "/proc/stat";
+
 
 enum {
 	INFO,

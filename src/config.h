@@ -11,17 +11,18 @@ public:
 	configure(const char* filename); /* construct */
 	~configure(); /* destruct */
 	void parse_config_file(std::string path = ""); /* analyze the conf file */
+	bool reload(const char* filename = NULL); /* reload the config */
 	void debug_print();
 
 private:
 	int run_state; /* running mode */
 	std::string conf_name; /* configure file name */
 	int interval;  /* how many seconds escape in every print  */
-	unsigned int modules_num; /* modules counter */
 	std::vector<std::string> enable_modules_list;  /* enable modules */
 	std::map<std::string,std::string> confMap;
 	int debug_level; /* debug level */
 	std::vector<std::string> output_interface; /* output form */
+	std::string modules_path; /*modules path*/
 
 	//output for print
 	int print_mode; /* print summary or detail */

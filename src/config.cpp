@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include "config.h"
 #include "common.h"
 
@@ -9,10 +9,10 @@ configure::configure(const char* filename):
 	run_state(RUN_NULL),
 	conf_name(filename),
 	interval(COLLECT_INTERVAL),
-	modules_num(0),
 	debug_level(CRITICAL),
 	print_mode(PRINT_SUMMARY),
 	output_file_path(DEFAULT_SAVE_FILENAME),
+	modules_path(DEFAULT_MODULES_PATH),
 	db_ip(""),
 	db_port(3306),
 	db_url("")
@@ -137,9 +137,19 @@ void configure::parse_line()
 			if(iter->second.find("url"))
 				output_interface.push_back("url");
 		}
+		else if(token == "interval")
+		{
+			int val = atoi(iter->second.c_str());
+			if(val >= 60)
+				interval = val;
+		}
 		else if(token == "output_file_path")
 		{
 			output_file_path = iter->second;
+		}
+		else if(token == "modules_path")
+		{
+			modules_path = iter->second;
 		}
 		else if(token == "output_db_modules")
 		{
@@ -208,6 +218,7 @@ void configure::debug_print()
 		std::cout<<"  "<<*iter1;
 	std::cout<<std::endl;
 	std::cout<<"debug_level: "<<debug_level<<std::endl;
+	std::cout<<"modules_path:  "<<modules_path<<std::endl;
 	std::cout<<"-----------mapConf----------"<<std::endl;
 	std::map<std::string,std::string>::iterator iter2 = confMap.begin();
 	for(; iter2 != confMap.end();iter2++)
@@ -227,10 +238,30 @@ void configure::debug_print()
 	std::cout<<std::endl;
 
 	
-	
-
-	
 }
+
+
+bool configure::reload(const char* path)
+{
+	if (NULL != path)
+		conf_name = std::string(path);
+	run_state = RUN_NULL;
+	interval = COLLECT_INTERVAL;
+	confMap.clear();
+	debug_level = CRITICAL;
+	output_interface.clear();
+	print_mode = PRINT_SUMMARY;
+	output_file_path = DEFAULT_SAVE_FILENAME;
+	modules_path = DEFAULT_MODULES_PATH;
+	db_module_list.clear();
+	db_ip = "";
+	db_port = 3306;
+	db_url = "";
+	parse_config_file();
+
+}
+
+
 /*
 int main()
 {
