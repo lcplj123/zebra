@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <sstream>
 #include "../module.h"
 
 const char* cpu_usage = "cpu usage:--------------------";
@@ -44,5 +45,28 @@ private:
 private:
 	void read_cpu_stat()
 	{
+		memset(cpu_status,0,sizeof(cpu_status));
+		std::string s;
+		ifstream fin(STAT);
+		while(getline(fin,s))
+		{
+			if(0 == s.compare(0,4,"cpu "))	
+			{
+				istringstream input(s);
+				input>>cpu_status.cpu_user>>cpu_status.cpu_nice>>cpu_status.cpu_sys>>cpu_status.cpu_idle>>cpu_status.cpu_iowait>>cpu_status.cpu_hardirq>>cpu_status.cpu_softirq>>cpu_status.cpu_steal>>cpu_status.cpu_guest;
+
+				break;
+			}
+		}
+
+		ifstream fcpu(CPUINFO);
+		std::string ss;
+		while(getline(fcpu,ss))
+		{
+			if(0 == ss.compare(0,9,"processor"))	
+			{
+				cpu_status.cpu_number++;
+			}
+		}
 	}
 };
