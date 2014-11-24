@@ -30,7 +30,7 @@ public:
 	virtual void collect_data() /* collect data */
 	{
 	}
-	virtual void save_file(ofstream& out) /*output to file*/
+	virtual void save_file(std::ofstream& out) /*output to file*/
 	{
 	}
 	virtual void print(int level) /* output to screen */
