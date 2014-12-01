@@ -14,7 +14,7 @@ public:
 	bool reload(const char* filename = NULL); /* reload the config */
 	void debug_print();
 
-private:
+public:
 	int run_state; /* running mode */
 	std::string conf_name; /* configure file name */
 	int interval;  /* how many seconds escape in every print  */

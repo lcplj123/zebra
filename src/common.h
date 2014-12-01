@@ -1,7 +1,7 @@
 
 enum {
 	RUN_NULL,
-	RUN_PRINT,
+	RUN_LIVE,
 	RUN_CRON,
 };
 

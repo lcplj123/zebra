@@ -1,3 +1,4 @@
+ADD_SUBDIRECTORY(modules)
 #------------config-----------------
 SET(CONFIG_SRC config.cpp)
 ADD_LIBRARY(config_static STATIC ${CONFIG_SRC})

@@ -40,6 +40,10 @@ public:
 	{
 		_enable == enable? _enable:!_enable;
 	}
+	bool enable()
+	{
+		return _enable;
+	}
 
 public:
 

@@ -4,13 +4,14 @@
 #include <unistd.h>
 #include "../module.h"
 
-const char* cpu_usage = "cpu usage:--------------------";
+const char* cpu_howto = "cpu usage:--------------------";
 
 class module_cpu:public module
 {
 public:
 	module_cpu():
-		module("module_cpu",cpu_usage)
+		module("module_cpu",cpu_howto),
+		cpu_usage(0.0)
 	{
 	}
 
@@ -19,18 +20,22 @@ public:
 	}
 	virtual void collect_data()
 	{
+		if(!enable()) return;
+		read_cpu_stat();
 	}
 	virtual void save_file(std::ofstream& out)
 	{
+		if(!enable()) return;
 		out<<"cpu:"<<cpu_status.cpu_user<<","<<cpu_status.cpu_nice<<","<<cpu_status.cpu_sys<<","<<cpu_status.cpu_idle<<","<<cpu_status.cpu_iowait<<","<<cpu_status.cpu_hardirq<<","<<cpu_status.cpu_softirq<<","<<cpu_status.cpu_steal<<","<<cpu_status.cpu_guest<<","<<cpu_status.cpu_number<<"|";
 	}
 	virtual void print(int level)
 	{
-		if (SUMMARY == level)
+		if(!enable()) return;
+		if (PRINT_SUMMARY == level)
 		{
 
 		}
-		else if(DETAIL == level)
+		else if(PRINT_DETAIL == level)
 		{
 
 		}
@@ -52,7 +57,7 @@ private:
 	};
 	cpu_status_s cpu_status;
 	cpu_status_s old_status;
-
+	float cpu_usage;
 
 private:
 	void read_cpu_stat()
@@ -74,6 +79,7 @@ private:
 				old_status.cpu_number++;
 			}
 		}
+
 		while(getline(fin,olds))
 		{
 			if(0 == olds.compare(0,4,"cpu "))
@@ -103,6 +109,17 @@ private:
 
 	void caculate_cpu()
 	{
-		
+		cpu_usage = 0.0;
+		//total1 = user+nice+system+idle+iowait+irq+softirq+steal+guest
+		//total2 = user+nice+system+idle+iowait+irq+softirq+steal+guest
+		//cpu_usage = (idle[0]-idle[1])/(total1-total[2])
+		unsigned int total1,total2;
+		total1 = old_status.cpu_user + old_status.cpu_nice + old_status.cpu_sys + old_status.cpu_idle + old_status.cpu_iowait + old_status.cpu_hardirq + old_status.cpu_softirq + old_status.cpu_steal + old_status.cpu_guest;
+
+		total2 = cpu_status.cpu_user + cpu_status.cpu_nice + cpu_status.cpu_sys + cpu_status.cpu_idle + cpu_status.cpu_iowait + cpu_status.cpu_hardirq + cpu_status.cpu_softirq + cpu_status.cpu_steal + cpu_status.cpu_guest;
+		unsigned int total = total2 - total1;
+		unsigned int idle = cpu_status.cpu_idle - cpu_status.cpu_idle;
+		cpu_usage = 100*(total - idle) / total;
+
 	}
 };

@@ -2,11 +2,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <fcntl.h>
 #include "config.h"
 #include "common.h"
 
 configure::configure(const char* filename):
-	run_state(RUN_NULL),
+	run_state(RUN_LIVE),
 	conf_name(filename),
 	interval(COLLECT_INTERVAL),
 	debug_level(CRITICAL),
@@ -35,6 +36,14 @@ void configure::parse_config_file(std::string path)
 	std::string s;
 	if (path != "")
 		conf_name = path;
+
+	//检查文件是否存在
+	if(access(conf_name.c_str(),F_OK)!=0)
+	{
+		std::cout<<"文件不存在"<<conf_name<<std::endl;
+		return;
+	}
+
 	std::ifstream fin(conf_name.c_str());
 	while(getline(fin,s))
 		getSplit(s);
@@ -140,8 +149,7 @@ void configure::parse_line()
 		else if(token == "interval")
 		{
 			int val = atoi(iter->second.c_str());
-			if(val >= 60)
-				interval = val;
+			interval = val >=5? val:5;
 		}
 		else if(token == "output_file_path")
 		{
