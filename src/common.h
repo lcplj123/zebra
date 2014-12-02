@@ -18,7 +18,7 @@ const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/";
 const char* STAT = "/proc/stat";
 const char* MEMINFO = "/proc/meminfo";
 const char* CPUINFO = "/proc/cpuinfo";
-
+const char* DEFAULT_SO_PATH = "/usr/local/zebra/modules";
 
 enum {
 	INFO,

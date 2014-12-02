@@ -19,7 +19,7 @@ public:
 	std::string conf_name; /* configure file name */
 	int interval;  /* how many seconds escape in every print  */
 	std::vector<std::string> enable_modules_list;  /* enable modules */
-	std::map<std::string,std::string> confMap;
+	std::map<std::string,std::string> confMap; /* 读取配置使用的文件 */
 	int debug_level; /* debug level */
 	std::vector<std::string> output_interface; /* output form */
 	std::string modules_path; /*modules path*/

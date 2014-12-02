@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include <getopt.h>
+#include <fstream>
 #include "config.h"
+#include "modmgr.h"
+#include "common.h"
 
 const char* conf_path = "/root/zebra.conf";
 const char* shortopt = ":lci:";
@@ -57,11 +60,18 @@ void opt_init(int argc,char** argv,configure& conf)
 
 }
 
-//close
-void shutdown()
+void run_cron(configure& conf,modmgr& mgr)
 {
-	//free_modules();
+	std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);	
+
 }
+
+void run_live(configure& conf,modmgr& mgr)
+{
+	
+
+}
+
 
 int main(int argc,char** argv)
 {
@@ -74,20 +84,21 @@ int main(int argc,char** argv)
 	opt_init(argc,argv,conf);
 
 	//load module manager
-	//
+	modmgr mgr(&conf);
+
 
 	//start
 	switch(conf.run_state)
 	{
 		case RUN_CRON:
+			run_cron(conf,mgr);
 			break;
 		case RUN_LIVE:
+			run_live(conf,mgr);
 			break;
 		case RUN_NULL:
 			break;
 	}
-
-	shutdown();
 
 	return 0;
 }
