@@ -14,6 +14,7 @@ public:
 	bool load_modules(std::string path = ""); /* 加载模块 */
 	bool collect_data(); /* 搜集数据 */
 	bool save_file(std::ofstream& out); /* 将数据保存到文件 */
+	bool print(int level); /* 输出到屏幕  */
 	bool setEnable(std::string modulename,bool enable); /* 设置是否启用 */
 	void freemodules();
 

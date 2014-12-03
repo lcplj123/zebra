@@ -42,11 +42,11 @@ bool modmgr::load_modules(std::string path)
 
 bool modmgr::collect_data()
 {
-	typedef void (*cd_fn)();
+	void (*collectdata)();
 	std::map<std::string,void*>::iterator iter = modules_list.begin();
 	for(; iter != modules_list.end(); iter++)
 	{
-		cd_fn collectdata = dlsym(iter->second,"collect_data");
+		collectdata = (void (*)())dlsym(iter->second,"collect_data"); /* 必须得加一个转换，否则呜啊编译 */
 		if(dlerror())
 		{
 			return false;
@@ -58,16 +58,32 @@ bool modmgr::collect_data()
 
 bool modmgr::save_file(std::ofstream& out)
 {
-	typedef void (*sf_fn)(ofstream&);
+	typedef void (*sf_fn)(std::ofstream&);
 	std::map<std::string,void*>::iterator iter = modules_list.begin();
 	for(; iter != modules_list.end(); iter++)
 	{
-		sf_fn savefile = dlsym(iter->second,"save_file");
+		sf_fn savefile = (void (*)(std::ofstream&))dlsym(iter->second,"save_file");
 		if(dlerror())
 		{
 			return false;
 		}
 		savefile(out);
+	}
+	return true;
+}
+
+bool modmgr::print(int level)
+{
+	typedef	void (*pr_fn)(int);
+	std::map<std::string,void*>::iterator iter = modules_list.begin();
+	for(; iter != modules_list.end(); iter++)
+	{
+		pr_fn  print = (void (*)(int))dlsym(iter->second,"print");
+		if(dlerror())
+		{
+			return false;
+		}
+		print(level);
 	}
 	return true;
 }

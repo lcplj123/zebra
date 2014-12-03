@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <fstream>
+#include "common.h"
 #include "config.h"
 #include "modmgr.h"
-#include "common.h"
 
 const char* conf_path = "/root/zebra.conf";
 const char* shortopt = ":lci:";
@@ -15,6 +15,7 @@ struct option longopt[] = {
 	{0,0,0,0},
 	
 };
+
 
 //参数用法
 void usage()
@@ -63,12 +64,21 @@ void opt_init(int argc,char** argv,configure& conf)
 void run_cron(configure& conf,modmgr& mgr)
 {
 	std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);	
-
+	mgr.collect_data();
+	mgr.save_file(out);
+	out.close();
 }
 
 void run_live(configure& conf,modmgr& mgr)
 {
-	
+	while(1)
+	{
+		std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);
+		mgr.collect_data();
+		mgr.save_file(out);
+		out.close();
+		sleep(conf.interval);
+	}
 
 }
 

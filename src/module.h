@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "common.h"
 
 class module
 {
@@ -53,8 +52,6 @@ private:
 	bool _enable; /* if use this module */
 
 };
-
-
 
 
 #endif //__MODULE_H__

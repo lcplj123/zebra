@@ -1,29 +1,25 @@
+#ifndef _ZEBRA_COMMON_H__
+#define _ZEBRA_COMMON_H__
 
-enum {
-	RUN_NULL,
-	RUN_LIVE,
-	RUN_CRON,
-};
+extern int RUN_NULL;
+extern int RUN_LIVE;
+extern int RUN_CRON;
+extern const int COLLECT_INTERVAL;
+extern int PRINT_SUMMARY;
+extern int PRINT_DETAIL;
 
-const int COLLECT_INTERVAL = 300;
+extern const char* DEFAULT_SAVE_FILENAME;
+extern const char* DEFAULT_CONF_FILENAME;
+extern const char* DEFAULT_MODULES_PATH;
+extern const char* STAT;
+extern const char* MEMINFO;
+extern const char* CPUINFO;
+extern const char* DEFAULT_SO_PATH;
 
-enum {
-	PRINT_SUMMARY,
-	PRINT_DETAIL,
-};
+extern int INFO;
+extern int DEBUG;
+extern int WARNING;
+extern int ERROR;
+extern int CRITICAL;
 
-const char* DEFAULT_SAVE_FILENAME = "/var/log/zebra.data";
-const char* DEFAULT_CONF_FILENAME = "/etc/zebra/zebra.conf";
-const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/";
-const char* STAT = "/proc/stat";
-const char* MEMINFO = "/proc/meminfo";
-const char* CPUINFO = "/proc/cpuinfo";
-const char* DEFAULT_SO_PATH = "/usr/local/zebra/modules";
-
-enum {
-	INFO,
-	DEBUG,
-	WARNING,
-	ERROR,
-	CRITICAL,
-};
+#endif
