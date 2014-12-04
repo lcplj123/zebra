@@ -19,7 +19,7 @@ public:
 		_enable(true)
 	{
 	}
-	~module()
+	virtual	~module()
 	{
 	}
 	void usage()
@@ -53,5 +53,12 @@ private:
 
 };
 
+extern "C"{
+module* create();
+void release(module*);
+typedef module* (*new_module)();
+typedef void (*release_module)(module*);
+
+}
 
 #endif //__MODULE_H__

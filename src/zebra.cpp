@@ -1,10 +1,22 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <fstream>
-#include "common.h"
+#include <iostream>
+//#include "common.h"
 #include "config.h"
 #include "modmgr.h"
 
+enum{
+	RUN_NULL,
+	RUN_LIVE,
+	RUN_CRON,
+};
+enum {
+	PRINT_SUMMARY,
+	PRINT_DETAIL,
+};
+
+const char* DEFAULT_SAVE_FILENAME = "/root/zebra.data";
 const char* conf_path = "/root/zebra.conf";
 const char* shortopt = ":lci:";
 struct option longopt[] = {
@@ -28,22 +40,27 @@ void opt_init(int argc,char** argv,configure& conf)
 {
 	int opt = 0;
 	int long_index = 0;
+	std::cout<<"解析输入参数"<<std::endl;
 	while((opt = getopt_long(argc,argv,shortopt,longopt,&long_index)) != -1)
 	{
 		switch(opt)
 		{
 			case 'c':
 				conf.run_state = RUN_CRON;
+				std::cout<<"run in cron..."<<std::endl;
 				break;
 			case 'l':
 				conf.run_state = RUN_LIVE;
+				std::cout<<"run in live....."<<std::endl;
 				break;
 			case 'd':
 				conf.print_mode = PRINT_DETAIL;
+				std::cout<<"run in detail....."<<std::endl;
 				break;
 			case 'i':
 				break;
 			case 'h':
+				std::cout<<"run in help...."<<std::endl;
 				usage();
 				break;
 			case ':': //缺少选项参数
@@ -58,6 +75,7 @@ void opt_init(int argc,char** argv,configure& conf)
 				break;
 		}
 	}
+	std::cout<<"解析输入参数 结束"<<std::endl;
 
 }
 
@@ -75,7 +93,8 @@ void run_live(configure& conf,modmgr& mgr)
 	{
 		std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);
 		mgr.collect_data();
-		mgr.save_file(out);
+		
+		//mgr.save_file(out);
 		out.close();
 		sleep(conf.interval);
 	}
@@ -95,20 +114,20 @@ int main(int argc,char** argv)
 
 	//load module manager
 	modmgr mgr(&conf);
-
+	mgr.load_modules();
+	mgr.print_modules();
 
 	//start
 	switch(conf.run_state)
 	{
-		case RUN_CRON:
+		case 2:
 			run_cron(conf,mgr);
 			break;
-		case RUN_LIVE:
+		case 1:
 			run_live(conf,mgr);
 			break;
-		case RUN_NULL:
+		case 0:
 			break;
 	}
-
 	return 0;
 }

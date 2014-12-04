@@ -5,6 +5,7 @@
 #include <fstream>
 
 class configure;
+class module;
 class modmgr
 {
 public:
@@ -17,9 +18,11 @@ public:
 	bool print(int level); /* 输出到屏幕  */
 	bool setEnable(std::string modulename,bool enable); /* 设置是否启用 */
 	void freemodules();
+	void print_modules();
 
 private:
-	std::map<std::string,void*> modules_list;
+	std::map<std::string,void*> so_list; /* 模块名及其对于的lib地址 */
+	std::map<std::string,module*> modules_list; /* 模块名及其对应的类地址 */
 	configure* conf;
 
 };

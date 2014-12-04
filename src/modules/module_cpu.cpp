@@ -5,6 +5,13 @@
 #include "../module.h"
 
 const char* cpu_howto = "cpu usage:--------------------";
+const char* STAT = "/proc/stat";
+const char* CPUINFO = "/proc/cpuinfo";
+
+enum{
+	PRINT_SUMMARY,
+	PRINT_DETAIL,
+};
 
 class module_cpu:public module
 {
@@ -13,15 +20,19 @@ public:
 		module("module_cpu",cpu_howto),
 		cpu_usage(0.0)
 	{
+		std::cout<<"构造cpu模块。。。。"<<std::endl;
 	}
 
-	~module_cpu()
+	virtual	~module_cpu()
 	{
+		std::cout<<"析构cpu模块。。。"<<std::endl;
 	}
 	virtual void collect_data()
 	{
 		if(!enable()) return;
 		read_cpu_stat();
+		caculate_cpu();
+		//debug_print(cpu_status);
 	}
 	virtual void save_file(std::ofstream& out)
 	{
@@ -84,20 +95,23 @@ private:
 		{
 			if(0 == olds.compare(0,4,"cpu "))
 			{
-				std::istringstream input(olds);
+				std::cout<<"1:"<<olds<<std::endl;
+				std::istringstream input(olds.substr(5));
 				input>>old_status.cpu_user>>old_status.cpu_nice>>old_status.cpu_sys>>old_status.cpu_idle>>old_status.cpu_iowait>>old_status.cpu_hardirq>>old_status.cpu_softirq>>old_status.cpu_steal>>old_status.cpu_guest;
 				break;
 			}
 		}
 	
-		fin.seekg(0,std::ios::beg);
-		sleep(1);
+		fin.close();
+		sleep(2);
+		fin.open(STAT);
 
 		while(getline(fin,s))
 		{
 			if(0 == s.compare(0,4,"cpu "))	
 			{
-				std::istringstream input(s);
+				std::istringstream input(s.substr(5));
+				std::cout<<"2:"<<s<<std::endl;
 				input>>cpu_status.cpu_user>>cpu_status.cpu_nice>>cpu_status.cpu_sys>>cpu_status.cpu_idle>>cpu_status.cpu_iowait>>cpu_status.cpu_hardirq>>cpu_status.cpu_softirq>>cpu_status.cpu_steal>>cpu_status.cpu_guest;
 
 				break;
@@ -118,8 +132,47 @@ private:
 
 		total2 = cpu_status.cpu_user + cpu_status.cpu_nice + cpu_status.cpu_sys + cpu_status.cpu_idle + cpu_status.cpu_iowait + cpu_status.cpu_hardirq + cpu_status.cpu_softirq + cpu_status.cpu_steal + cpu_status.cpu_guest;
 		unsigned int total = total2 - total1;
-		unsigned int idle = cpu_status.cpu_idle - cpu_status.cpu_idle;
-		cpu_usage = 100*(total - idle) / total;
+		unsigned int idle = cpu_status.cpu_idle - old_status.cpu_idle;
+		cpu_usage = 100.0*(total - idle) / total;
+		//std::cout<<"total1 = "<<total1<<std::endl;
+		//std::cout<<"total2 = "<<total2<<std::endl;
+		//std::cout<<"idle = "<<idle<<std::endl;
+		std::cout<<"cpu_usage: "<<cpu_usage<<std::endl;
+
+	}
+
+	void debug_print(cpu_status_s& p)
+	{
+		std::cout<<"-------------------cpu----------------"<<std::endl;
+		std::cout<<"-------old"<<std::endl;
+		std::cout<<"cpu_user: "<<p.cpu_user<<std::endl;
+		std::cout<<"cpu_nice: "<<p.cpu_nice<<std::endl;
+		std::cout<<"cpu_sys: "<<p.cpu_sys<<std::endl;
+		std::cout<<"cpu_idle: "<<p.cpu_idle<<std::endl;
+		std::cout<<"cpu_iowait: "<<p.cpu_iowait<<std::endl;
+		std::cout<<"cpu_softirq: "<<p.cpu_softirq<<std::endl;
+		std::cout<<"cpu_hardirq: "<<p.cpu_hardirq<<std::endl;
+		std::cout<<"cpu_number: "<<p.cpu_number<<std::endl;
+		std::cout<<"-------------------end----------------"<<std::endl;
 
 	}
 };
+
+
+extern "C"{
+//创建类
+module* create()
+{
+	return new module_cpu; 
+}
+
+//销毁类
+void release(module* p)
+{
+	if(p)
+	{
+		delete p;
+		p = NULL;
+	}
+}
+}

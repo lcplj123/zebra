@@ -5,7 +5,30 @@
 #include <cstdio>
 #include <fcntl.h>
 #include "config.h"
-#include "common.h"
+//#include "common.h"
+
+enum {
+	RUN_NULL,
+	RUN_LIVE,
+	RUN_CRON,
+};
+const int COLLECT_INTERVAL = 10;
+enum {
+	INFO,
+	DEBUG,
+	WARNING,
+	ERROR,
+	CRITICAL,
+};
+enum{
+	PRINT_SUMMARY,
+	PRINT_DETAIL,
+};
+
+extern const char* DEFAULT_SAVE_FILENAME;
+extern const char* DEFAULT_CONF_FILENAME;
+extern const char* DEFAULT_MODULES_PATH;
+
 
 configure::configure(const char* filename):
 	run_state(RUN_LIVE),

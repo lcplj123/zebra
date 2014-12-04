@@ -1,16 +1,11 @@
-#ifndef _ZEBRA_COMMON_H__
-#define  _ZEBRA_COMMON_H__
-
-enum {
-	RUN_NULL,
-	RUN_LIVE,
-	RUN_CRON,
-};
+const int RUN_NULL = 0;
+const int RUN_LIVE = 1;
+const int RUN_CRON = 2;
 
 const int COLLECT_INTERVAL = 300;
 
 enum {
-	PRINT_SUMMARY,
+	PRINT_SUMMARY = 0,
 	PRINT_DETAIL,
 };
 
@@ -23,11 +18,10 @@ const char* CPUINFO = "/proc/cpuinfo";
 const char* DEFAULT_SO_PATH = "/usr/local/zebra/modules";
 
 enum {
-	INFO,
+	INFO = 0,
 	DEBUG,
 	WARNING,
 	ERROR,
 	CRITICAL,
 };
 
-#endif // _ZEBRA_COMMON_H__
