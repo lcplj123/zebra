@@ -93,7 +93,14 @@ void run_live(configure& conf,modmgr& mgr)
 	{
 		std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);
 		mgr.collect_data();
-		
+		std::vector<std::string>::iterator iter = conf.enable_modules_list.begin();
+		for(; iter != conf.enable_modules_list.end(); iter++)
+		{
+			std::cout<<"--"<<(*iter).substr(7,std::string::npos)<<"--";
+		}
+		std::cout<<std::endl;
+		mgr.print(conf.print_mode);
+		std::cout<<std::endl;
 		//mgr.save_file(out);
 		out.close();
 		sleep(conf.interval);

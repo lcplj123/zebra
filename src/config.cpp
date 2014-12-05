@@ -46,6 +46,7 @@ configure::configure(const char* filename):
 	db_module_list.clear();
 	confMap.clear();
 	output_interface.clear();
+	output_interface.push_back("file");
 	
 }
 
@@ -53,6 +54,7 @@ configure::~configure()
 {
 	enable_modules_list.clear();
 	db_module_list.clear();
+	output_interface.clear();
 }
 
 void configure::parse_config_file(std::string path)
@@ -163,8 +165,6 @@ void configure::parse_line()
 		}
 		else if(token == "output_interface")
 		{
-			if(iter->second.find("file"))
-				output_interface.push_back("file");
 			if(iter->second.find("db"))
 				output_interface.push_back("db");
 			if(iter->second.find("url"))
@@ -282,6 +282,7 @@ bool configure::reload(const char* path)
 	confMap.clear();
 	debug_level = CRITICAL;
 	output_interface.clear();
+	output_interface.push_back("file");
 	print_mode = PRINT_SUMMARY;
 	output_file_path = DEFAULT_SAVE_FILENAME;
 	modules_path = DEFAULT_MODULES_PATH;

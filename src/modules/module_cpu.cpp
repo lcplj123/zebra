@@ -32,7 +32,6 @@ public:
 		if(!enable()) return;
 		read_cpu_stat();
 		caculate_cpu();
-		//debug_print(cpu_status);
 	}
 	virtual void save_file(std::ofstream& out)
 	{
@@ -44,11 +43,10 @@ public:
 		if(!enable()) return;
 		if (PRINT_SUMMARY == level)
 		{
-
+			std::cout<<"  "<<cpu_usage<<"/"<<cpu_status.cpu_number;
 		}
 		else if(PRINT_DETAIL == level)
 		{
-
 		}
 	}
 
@@ -95,7 +93,7 @@ private:
 		{
 			if(0 == olds.compare(0,4,"cpu "))
 			{
-				std::cout<<"1:"<<olds<<std::endl;
+				//std::cout<<"1:"<<olds<<std::endl;
 				std::istringstream input(olds.substr(5));
 				input>>old_status.cpu_user>>old_status.cpu_nice>>old_status.cpu_sys>>old_status.cpu_idle>>old_status.cpu_iowait>>old_status.cpu_hardirq>>old_status.cpu_softirq>>old_status.cpu_steal>>old_status.cpu_guest;
 				break;
@@ -111,7 +109,7 @@ private:
 			if(0 == s.compare(0,4,"cpu "))	
 			{
 				std::istringstream input(s.substr(5));
-				std::cout<<"2:"<<s<<std::endl;
+				//std::cout<<"2:"<<s<<std::endl;
 				input>>cpu_status.cpu_user>>cpu_status.cpu_nice>>cpu_status.cpu_sys>>cpu_status.cpu_idle>>cpu_status.cpu_iowait>>cpu_status.cpu_hardirq>>cpu_status.cpu_softirq>>cpu_status.cpu_steal>>cpu_status.cpu_guest;
 
 				break;
@@ -137,7 +135,7 @@ private:
 		//std::cout<<"total1 = "<<total1<<std::endl;
 		//std::cout<<"total2 = "<<total2<<std::endl;
 		//std::cout<<"idle = "<<idle<<std::endl;
-		std::cout<<"cpu_usage: "<<cpu_usage<<std::endl;
+		//std::cout<<"cpu_usage: "<<cpu_usage<<std::endl;
 
 	}
 
