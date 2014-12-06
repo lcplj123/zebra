@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdio>
 #include <dlfcn.h>
+#include <ctime>
 #include "modmgr.h"
 #include "config.h"
 #include "module.h"
@@ -32,12 +33,12 @@ bool modmgr::load_modules(std::string path)
 	if(conf == NULL) return false;
 	char buf[256] = {0};
 	std::vector<std::string>::iterator iter = conf->enable_modules_list.begin();
-	std::cout<<"加载模块中。。。。"<<std::endl;
+	//std::cout<<"加载模块中。。。。"<<std::endl;
 	for(; iter != conf->enable_modules_list.end(); iter++)
 	{
 		memset(buf,0,sizeof(buf));
 		sprintf(buf,"%slib%s.so",DEFAULT_MODULES_PATH,(*iter).c_str());
-		std::cout<<"当前加载的模块名字："<<buf<<std::endl;
+		//std::cout<<"当前加载的模块名字："<<buf<<std::endl;
 		//load module lib
 		void* lib = dlopen(buf,RTLD_NOW|RTLD_GLOBAL);
 		if(!lib) 
@@ -60,7 +61,7 @@ bool modmgr::load_modules(std::string path)
 
 	}
 
-	std::cout<<"加载模块结束。。。。"<<std::endl;
+	//std::cout<<"加载模块结束。。。。"<<std::endl;
 
 	return true;
 }
@@ -81,6 +82,8 @@ bool modmgr::collect_data()
 
 bool modmgr::save_file(std::ofstream& out)
 {
+	time_t cur_time = time(NULL);
+	out<<cur_time;	
 	std::map<std::string,module*>::iterator iter = modules_list.begin();
 	for(; iter != modules_list.end(); iter++)
 	{
@@ -90,6 +93,7 @@ bool modmgr::save_file(std::ofstream& out)
 			p->save_file(out);
 		}
 	}
+	out<<std::endl;
 	return true;
 }
 

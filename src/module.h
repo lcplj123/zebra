@@ -1,8 +1,14 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
+
+enum{
+	PRINT_SUMMARY,
+	PRINT_DETAIL,
+};
 
 class module
 {

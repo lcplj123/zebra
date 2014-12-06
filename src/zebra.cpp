@@ -96,12 +96,12 @@ void run_live(configure& conf,modmgr& mgr)
 		std::vector<std::string>::iterator iter = conf.enable_modules_list.begin();
 		for(; iter != conf.enable_modules_list.end(); iter++)
 		{
-			std::cout<<"--"<<(*iter).substr(7,std::string::npos)<<"--";
+			std::cout<<"--"<<(*iter).substr(7,std::string::npos)<<"-- ";
 		}
 		std::cout<<std::endl;
 		mgr.print(conf.print_mode);
 		std::cout<<std::endl;
-		//mgr.save_file(out);
+		mgr.save_file(out);
 		out.close();
 		sleep(conf.interval);
 	}
@@ -127,13 +127,13 @@ int main(int argc,char** argv)
 	//start
 	switch(conf.run_state)
 	{
-		case 2:
+		case RUN_CRON:
 			run_cron(conf,mgr);
 			break;
-		case 1:
+		case RUN_LIVE:
 			run_live(conf,mgr);
 			break;
-		case 0:
+		case RUN_NULL:
 			break;
 	}
 	return 0;

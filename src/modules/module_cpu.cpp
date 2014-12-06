@@ -8,10 +8,6 @@ const char* cpu_howto = "cpu usage:--------------------";
 const char* STAT = "/proc/stat";
 const char* CPUINFO = "/proc/cpuinfo";
 
-enum{
-	PRINT_SUMMARY,
-	PRINT_DETAIL,
-};
 
 class module_cpu:public module
 {
@@ -36,14 +32,14 @@ public:
 	virtual void save_file(std::ofstream& out)
 	{
 		if(!enable()) return;
-		out<<"cpu:"<<cpu_status.cpu_user<<","<<cpu_status.cpu_nice<<","<<cpu_status.cpu_sys<<","<<cpu_status.cpu_idle<<","<<cpu_status.cpu_iowait<<","<<cpu_status.cpu_hardirq<<","<<cpu_status.cpu_softirq<<","<<cpu_status.cpu_steal<<","<<cpu_status.cpu_guest<<","<<cpu_status.cpu_number<<"|";
+		out<<"|cpu:"<<cpu_status.cpu_user<<","<<cpu_status.cpu_nice<<","<<cpu_status.cpu_sys<<","<<cpu_status.cpu_idle<<","<<cpu_status.cpu_iowait<<","<<cpu_status.cpu_hardirq<<","<<cpu_status.cpu_softirq<<","<<cpu_status.cpu_steal<<","<<cpu_status.cpu_guest<<","<<cpu_status.cpu_number;
 	}
 	virtual void print(int level)
 	{
 		if(!enable()) return;
 		if (PRINT_SUMMARY == level)
 		{
-			std::cout<<"  "<<cpu_usage<<"/"<<cpu_status.cpu_number;
+			std::cout<<"  "<<std::setprecision(2)<<cpu_usage<<"/"<<cpu_status.cpu_number;
 		}
 		else if(PRINT_DETAIL == level)
 		{
@@ -88,7 +84,7 @@ private:
 				old_status.cpu_number++;
 			}
 		}
-
+		fcpu.close();
 		while(getline(fin,olds))
 		{
 			if(0 == olds.compare(0,4,"cpu "))
@@ -115,7 +111,7 @@ private:
 				break;
 			}
 		}
-
+		fin.close();
 	}
 
 
