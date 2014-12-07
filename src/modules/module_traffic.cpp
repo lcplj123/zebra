@@ -8,6 +8,13 @@
 const char* traffic_howto = "traffic usage:----------------";
 const char* NET_DEV = "/proc/net/dev";
 
+unsigned long long B  = 1;
+unsigned long long KB = 1024*B;
+unsigned long long MB = 1024*KB;
+unsigned long long GB = 1024*MB;
+unsigned long long TB = 1024*GB;
+unsigned long long PB = 1024*TB;
+unsigned long long EB = 1024*PB;
 
 class module_traffic:public module
 {
@@ -48,7 +55,7 @@ public:
 		if(!enable()) return;
 		if(PRINT_SUMMARY == level)
 		{
-			std::cout<<"  "<<total_traffic.byteIn<<" "<<total_traffic.byteOut;
+			std::cout<<"  "<<to_verbose(total_traffic.byteIn)<<" "<<to_verbose(total_traffic.byteOut);
 		}
 		else if(PRINT_DETAIL == level)
 		{
@@ -101,6 +108,24 @@ private:
 			total_traffic.packetIn += iter->second.packetIn;
 			total_traffic.packetOut += iter->second.packetOut;
 		}
+	}
+
+	std::string to_verbose(unsigned long long traffic)
+	{
+		std::ostringstream result;
+		if(traffic >= EB)
+			result<<traffic/EB<<"EB";
+		else if(traffic >= PB && traffic < EB)
+			result<<traffic/PB<<"PB";
+		else if(traffic >= GB && traffic < PB)
+			result<<traffic/GB<<"GB";
+		else if(traffic >= MB && traffic < GB)
+			result<<traffic/MB<<"MB";
+		else if(traffic >= KB && traffic <MB)
+			result<<traffic/KB<<"KB";
+		else
+			result<<traffic<<"B";
+		return result.str();
 	}
 
 	void debug_traffic()
