@@ -45,9 +45,6 @@ public:
 		{
 		}
 	}
-	virtual void write_db()
-	{
-	}
 
 private:
 	struct cpu_status_s{

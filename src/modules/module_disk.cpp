@@ -55,9 +55,6 @@ public:
 		{
 		}
 	}
-	virtual void write_db()
-	{
-	}
 
 private:
 	struct disk_status_s{

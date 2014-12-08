@@ -185,7 +185,7 @@ void configure::parse_line()
 		}
 		else if(token == "output_db_modules")
 		{
-			
+
 		}
 		else if(token == "output_db_addr")
 		{
@@ -272,7 +272,6 @@ void configure::debug_print()
 	
 }
 
-
 bool configure::reload(const char* path)
 {
 	if (NULL != path)
@@ -291,10 +290,10 @@ bool configure::reload(const char* path)
 	db_port = 3306;
 	db_url = "";
 	parse_config_file();
-
+	return true;
 }
 
-
+// for test use
 /*
 int main()
 {

@@ -111,6 +111,10 @@ bool modmgr::print(int level)
 	return true;
 }
 
+bool modmgr::write_db()
+{
+	return true;
+}
 void modmgr::freemodules()
 {
 

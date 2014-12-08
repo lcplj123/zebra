@@ -84,6 +84,7 @@ void run_cron(configure& conf,modmgr& mgr)
 	std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);	
 	mgr.collect_data();
 	mgr.save_file(out);
+	mgr.write_db();
 	out.close();
 }
 
