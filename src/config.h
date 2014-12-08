@@ -47,6 +47,8 @@ private:
 	void getSplit(const std::string& s); /* get the item splited by space or tab */
 	void parse_line();  /* parse every line option */
 	void parse_module(std::string token,std::string value); /* parse module item  */
+	void copy_to_db(); /* copy all enable module list to db_module_list */
+	void split(std::string& str,char delim,std::vector<std::string>& v); /* split string by delim*/
 
 };
 

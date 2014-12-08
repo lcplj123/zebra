@@ -185,7 +185,14 @@ void configure::parse_line()
 		}
 		else if(token == "output_db_modules")
 		{
-
+			if(iter->second == "all")
+			{
+				copy_to_db();
+			}
+			else
+			{
+				split(iter->second,',',db_module_list);				
+			}
 		}
 		else if(token == "output_db_addr")
 		{
@@ -265,7 +272,7 @@ void configure::debug_print()
 	std::cout<<"db_module_list: ";
 	for(; iter3 != db_module_list.end(); iter3++)
 	{
-		std::cout<<"  "<<*iter3;
+		std::cout<<*iter3<<",";
 	}
 	std::cout<<std::endl;
 
@@ -291,6 +298,32 @@ bool configure::reload(const char* path)
 	db_url = "";
 	parse_config_file();
 	return true;
+}
+
+void configure::copy_to_db()
+{
+	std::vector<std::string>::iterator iter = enable_modules_list.begin();
+	for(; iter != enable_modules_list.end(); iter++)
+	{
+		db_module_list.push_back(*iter);	
+	}
+}
+
+void configure::split(std::string& str,char delim,std::vector<std::string>& v)
+{
+	size_t pos = 0;
+	size_t index = 0;
+	std::cout<<str<<std::endl;
+	while((index = str.find_first_of(delim,pos)) != std::string::npos)
+	{
+		std::string tmp = removeTrim(str.substr(pos,index));
+		if(tmp.compare(0,7,"module_") == 0)
+			v.push_back(tmp);
+		pos = index + 1;
+	}
+	std::string tmp = removeTrim(str.substr(pos));
+	if(tmp.compare(0,7,"module_") == 0)
+		v.push_back(tmp);
 }
 
 // for test use

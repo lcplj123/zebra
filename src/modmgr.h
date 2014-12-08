@@ -25,7 +25,6 @@ private:
 	std::map<std::string,void*> so_list; /* 模块名及其对于的lib地址 */
 	std::map<std::string,module*> modules_list; /* 模块名及其对应的类地址 */
 	configure* conf;
-
 };
 
 #endif  // _MODULE_MGR_H__
