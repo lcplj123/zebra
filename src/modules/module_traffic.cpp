@@ -61,7 +61,9 @@ public:
 		{
 		}
 	}
-
+	virtual void write_db()
+	{
+	}
 
 private:
 	struct traffic_status_s{

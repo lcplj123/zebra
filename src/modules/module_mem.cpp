@@ -46,6 +46,9 @@ public:
 		{
 		}
 	}
+	virtual void write_db()
+	{
+	}
 
 private:
 	struct mem_status_s{  //in KB

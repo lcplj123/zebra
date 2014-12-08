@@ -41,6 +41,9 @@ public:
 	virtual void print(int level) /* output to screen */
 	{
 	}
+	virtual void write_db() /* output to db or url */
+	{
+	}
 	void setEnable(bool enable) /* enable or disable the module */
 	{
 		_enable == enable? _enable:!_enable;
