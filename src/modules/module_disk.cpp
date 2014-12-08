@@ -37,7 +37,7 @@ public:
 		if(!enable()) return;
 		read_disk_stat();
 		caculate_disk();
-		debug_print();
+		//debug_print();
 	}
 	virtual void save_file(std::ofstream& out)
 	{
@@ -49,7 +49,7 @@ public:
 		if(!enable()) return;
 		if(PRINT_SUMMARY == level)
 		{
-			std::cout<<"  "<<disk_usage<<" "<<total_disk/1024<<"GB";
+			std::cout<<"  "<<disk_usage<<"/"<<total_disk/1024<<"GB";
 		}
 		else if(PRINT_DETAIL == level)
 		{
@@ -132,13 +132,15 @@ private:
 	}
 	void caculate_disk()
 	{
+		total_disk = 0;
+		free_disk = 0;
 		std::map<std::string,disk_status_s>::iterator iter = disk_map.begin();
 		for(; iter != disk_map.end(); iter++)
 		{
 			total_disk += iter->second.blocksize*iter->second.blocknum/MB;
 			free_disk += iter->second.freeblocks*iter->second.blocksize/MB;
 		}
-		disk_usage =1.0*(total_disk - free_disk)/total_disk*100;
+		disk_usage =1.0*(total_disk - free_disk)/total_disk*100.0;
 	}
 	void debug_print()
 	{
