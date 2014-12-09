@@ -190,7 +190,8 @@ bool modmgr::write_to_mysql()
 		sql.append(p->get_dbstr());
 		sql.append(",");
 	}
-	sql.append("where " + conf->db_index + "=" + conf->db_key);
+	sql.erase(sql.length()-1,1);
+	sql.append(" where " + conf->db_index + " = " + conf->db_key);
 	std::cout<<"YYYYYYYYYYY "<<sql<<std::endl;
 	
 	return true;
