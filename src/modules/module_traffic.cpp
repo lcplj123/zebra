@@ -61,6 +61,15 @@ public:
 		{
 		}
 	}
+	virtual std::string get_dbstr()
+	{
+		std::ostringstream ss;
+		ss<<"trafficIn = ";
+		ss<<to_verbose(total_traffic.byteIn);
+		ss<<",trafficOut = ";
+		ss<<to_verbose(total_traffic.byteOut);
+		return ss.str();
+	}
 
 private:
 	struct traffic_status_s{
@@ -86,10 +95,8 @@ private:
 				traffic_status_s ts;
 				memset(&ts,0,sizeof(traffic_status_s));
 				std::istringstream input(ss.substr(index+1,std::string::npos));
-				//std::cout<<"XXXXXXXXXXX"<<input.str()<<std::endl;
 				unsigned long long tmp = 0;
 				input>>ts.byteIn>>ts.packetIn>>tmp>>tmp>>tmp>>tmp>>tmp>>tmp>>ts.byteOut>>ts.packetOut;
-				//std::cout<<"YYYYYYYYYYY"<<ts.byteIn<<"  "<<ts.byteOut<<"  "<<ts.packetIn<<"  "<<ts.packetOut<<std::endl;
 				traffic_map.insert(std::make_pair(ss.substr(0,index),ts));
 			}
 		}

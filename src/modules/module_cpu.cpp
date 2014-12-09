@@ -45,6 +45,13 @@ public:
 		{
 		}
 	}
+	virtual std::string get_dbstr()
+	{
+		std::ostringstream ss;
+		ss<<"cpu = ";
+		ss<<cpu_usage;
+		return ss.str();
+	}
 
 private:
 	struct cpu_status_s{

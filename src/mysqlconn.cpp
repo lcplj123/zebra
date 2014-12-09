@@ -64,6 +64,7 @@ MYSQL* MysqlConn::connect(const char* db_ip,unsigned int db_port,const char* db_
 	if(NULL == result)
 	{
 		std::cout<<"connect failed!"<<_host<<_port<<_user<<_pwd<<_dbname<<std::endl;
+		std::cout<<"error msg:"<<mysql_error(_mysql)<<std::endl;
 	}
 	else
 	{

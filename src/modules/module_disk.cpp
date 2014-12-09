@@ -55,6 +55,13 @@ public:
 		{
 		}
 	}
+	virtual std::string get_dbstr()
+	{
+		std::ostringstream ss;
+		ss<<"disk = ";
+		ss<<disk_usage;
+		return ss.str();
+	}
 
 private:
 	struct disk_status_s{

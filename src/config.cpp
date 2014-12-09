@@ -40,13 +40,18 @@ configure::configure(const char* filename):
 	modules_path(DEFAULT_MODULES_PATH),
 	db_ip(""),
 	db_port(3306),
-	db_url("")
+	db_name(""),
+	db_user(""),
+	db_passwd(""),
+	db_tabname(""),
+	db_url(""),
+	db_key(""),
+	db_index("")
 {
 	enable_modules_list.clear();
 	db_module_list.clear();
 	confMap.clear();
 	output_interface.clear();
-	output_interface.push_back("file");
 	
 }
 
@@ -165,9 +170,9 @@ void configure::parse_line()
 		}
 		else if(token == "output_interface")
 		{
-			if(iter->second.find("db"))
+			if(iter->second.find("db") != std::string::npos)
 				output_interface.push_back("db");
-			if(iter->second.find("url"))
+			if(iter->second.find("url") != std::string::npos)
 				output_interface.push_back("url");
 		}
 		else if(token == "interval")
@@ -207,15 +212,38 @@ void configure::parse_line()
 				db_port = dbport; 
 			}
 		}
+		else if(token == "output_db_name")
+		{
+			db_name = iter->second;
+		}
+		else if(token == "output_db_user")
+		{
+			db_user = iter->second;
+		}
+		else if(token == "output_db_passwd")
+		{
+			db_passwd = iter->second;
+		}
+		else if(token == "output_db_tablename")
+		{
+			db_tabname = iter->second;
+		}
 		else if(token == "output_url")
 		{
 			db_url = iter->second;	
+		}
+		else if(token == "output_db_key")
+		{
+			db_key = iter->second;
+		}
+		else if(token == "output_db_index")
+		{
+			db_index = iter->second;
 		}
 		else if(token == "include")
 		{
 			parse_include_conf(iter->second);
 		}
-
 
 	}
 
@@ -288,7 +316,6 @@ bool configure::reload(const char* path)
 	confMap.clear();
 	debug_level = CRITICAL;
 	output_interface.clear();
-	output_interface.push_back("file");
 	print_mode = PRINT_SUMMARY;
 	output_file_path = DEFAULT_SAVE_FILENAME;
 	modules_path = DEFAULT_MODULES_PATH;

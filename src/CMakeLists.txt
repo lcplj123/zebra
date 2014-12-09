@@ -26,15 +26,16 @@ SET_TARGET_PROPERTIES(modmgr_shared PROPERTIES OUTPUT_NAME "modmgr")
 SET(MYSQLCONN_SRC mysqlconn.cpp)
 ADD_LIBRARY(mysqlconn_static STATIC ${MYSQLCONN_SRC})
 ADD_LIBRARY(mysqlconn_shared SHARED ${MYSQLCONN_SRC})
-#TARGET_LINK_LIBRARIES(_static dl)
+TARGET_LINK_LIBRARIES(mysqlconn_static mysqlclient)
 SET_TARGET_PROPERTIES(mysqlconn_static PROPERTIES OUTPUT_NAME "mysqlconn")
 SET_TARGET_PROPERTIES(mysqlconn_shared PROPERTIES OUTPUT_NAME "mysqlconn")
+LINK_DIRECTORIES(/usr/lib64/mysql)
 
 #-------------zebra-------------------
 SET(ZEBRA_SRC zebra.cpp)
 ADD_EXECUTABLE(zebra ${ZEBRA_SRC})
 LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/src)
-TARGET_LINK_LIBRARIES(zebra modmgr_static common_static config_static common_static)
+TARGET_LINK_LIBRARIES(zebra modmgr_static common_static config_static common_static mysqlconn_static)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 

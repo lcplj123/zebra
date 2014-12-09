@@ -46,6 +46,13 @@ public:
 		{
 		}
 	}
+	virtual std::string get_dbstr()
+	{
+		std::ostringstream ss;
+		ss<<"mem = ";
+		ss<<mem_usage;
+		return ss.str();
+	}
 
 private:
 	struct mem_status_s{  //in KB

@@ -7,6 +7,7 @@
 #include "modmgr.h"
 #include "config.h"
 #include "module.h"
+#include "mysqlconn.h"
 //#include "common.h"
 
 //const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/";
@@ -113,6 +114,19 @@ bool modmgr::print(int level)
 
 bool modmgr::write_db()
 {
+	std::vector<std::string>::iterator iter = conf->output_interface.begin();
+	for(; iter != conf->output_interface.end(); iter++)
+	{
+		if(*iter == "db")
+		{
+			write_to_mysql();
+		}
+		if(*iter == "url")
+		{
+			write_to_url();
+		}
+	}
+
 	return true;
 }
 void modmgr::freemodules()
@@ -154,4 +168,35 @@ void modmgr::print_modules()
 	}
 	std::cout<<"----------------------"<<std::endl;
 
+}
+
+bool modmgr::write_to_mysql()
+{
+	MysqlConn conn;
+	if(!conn.connect(conf->db_ip.c_str(),conf->db_port,conf->db_user.c_str(),conf->db_passwd.c_str(),conf->db_name.c_str()))
+	{
+		std::cout<<"connect mysql error!"<<std::endl;
+		return false;
+	}
+
+	std::string sql = "update " + conf->db_tabname + " set  ";
+	std::vector<std::string>::iterator iter = conf->db_module_list.begin();
+	for(; iter != conf->db_module_list.end(); iter++)
+	{
+		std::map<std::string,module*>::iterator miter = modules_list.find(*iter);
+		if(miter == modules_list.end())
+			continue;
+		module* p = miter->second;
+		sql.append(p->get_dbstr());
+		sql.append(",");
+	}
+	sql.append("where " + conf->db_index + "=" + conf->db_key);
+	std::cout<<"YYYYYYYYYYY "<<sql<<std::endl;
+	
+	return true;
+}
+
+bool modmgr::write_to_url()
+{
+	return true;
 }

@@ -41,6 +41,9 @@ public:
 	virtual void print(int level) /* output to screen */
 	{
 	}
+	virtual std::string get_dbstr()
+	{
+	}
 	void setEnable(bool enable) /* enable or disable the module */
 	{
 		_enable == enable? _enable:!_enable;

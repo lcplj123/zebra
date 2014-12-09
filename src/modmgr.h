@@ -22,9 +22,13 @@ public:
 	void print_modules();
 
 private:
-	std::map<std::string,void*> so_list; /* 模块名及其对于的lib地址 */
+	std::map<std::string,void*> so_list; /* 模块名及其对应的lib地址 */
 	std::map<std::string,module*> modules_list; /* 模块名及其对应的类地址 */
 	configure* conf;
+
+private:
+	bool write_to_mysql(); /* 写到mysql数据 */
+	bool write_to_url(); /* 写到url */
 };
 
 #endif  // _MODULE_MGR_H__

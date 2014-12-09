@@ -103,6 +103,7 @@ void run_live(configure& conf,modmgr& mgr)
 		mgr.print(conf.print_mode);
 		std::cout<<std::endl;
 		mgr.save_file(out);
+		mgr.write_db();
 		out.close();
 		sleep(conf.interval);
 	}

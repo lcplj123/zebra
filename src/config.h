@@ -37,7 +37,13 @@ public:
 	std::vector<std::string> db_module_list; /* which module will output to database */
 	std::string db_ip; /* database ip */
 	unsigned int db_port; /* database port */
+	std::string db_name; /* the name of database to connect */
+	std::string db_user; /* db user */
+	std::string db_passwd; /* db password*/
+	std::string db_tabname; /* table name */
 	std::string db_url; /* database url */
+	std::string db_key; /* means ip or computer name */
+	std::string db_index; /* means the index(column) */
 
 private:
 	void parse_include_conf(std::string dirs); /* it allows the include item */
