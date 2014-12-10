@@ -28,5 +28,11 @@ ADD_LIBRARY(module_disk_shared SHARED ${MODULE_DISK_SRC})
 SET_TARGET_PROPERTIES(module_disk_static PROPERTIES OUTPUT_NAME "module_disk")
 SET_TARGET_PROPERTIES(module_disk_shared PROPERTIES OUTPUT_NAME "module_disk")
 
+#----------------process---------------------------
+SET(MODULE_PROCESS_SRC module_process.cpp)
+ADD_LIBRARY(module_process_static STATIC ${MODULE_PROCESS_SRC})
+ADD_LIBRARY(module_process_shared SHARED ${MODULE_PROCESS_SRC})
+SET_TARGET_PROPERTIES(module_process_static PROPERTIES OUTPUT_NAME "module_process")
+SET_TARGET_PROPERTIES(module_process_shared PROPERTIES OUTPUT_NAME "module_process")
 
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/modules)

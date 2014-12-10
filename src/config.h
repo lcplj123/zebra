@@ -44,6 +44,7 @@ public:
 	std::string db_url; /* database url */
 	std::string db_key; /* means ip or computer name */
 	std::string db_index; /* means the index(column) */
+	std::vector<std::string> process_list; /* processes that be checked */
 
 private:
 	void parse_include_conf(std::string dirs); /* it allows the include item */
@@ -54,7 +55,7 @@ private:
 	void parse_line();  /* parse every line option */
 	void parse_module(std::string token,std::string value); /* parse module item  */
 	void copy_to_db(); /* copy all enable module list to db_module_list */
-	void split(std::string& str,char delim,std::vector<std::string>& v); /* split string by delim*/
+	void splitBy(std::string& str,char delim,std::vector<std::string>& v); /*split the given string*/
 
 };
 

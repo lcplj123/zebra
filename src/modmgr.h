@@ -29,6 +29,7 @@ private:
 private:
 	bool write_to_mysql(); /* 写到mysql数据 */
 	bool write_to_url(); /* 写到url */
+	void init_modules(); /* 部分模块需要初始化，比如进程监控模块，需要给出监控的进程列表 */
 };
 
 #endif  // _MODULE_MGR_H__

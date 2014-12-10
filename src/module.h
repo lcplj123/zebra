@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <vector>
 #include <fstream>
 
 enum{
@@ -42,6 +43,9 @@ public:
 	{
 	}
 	virtual std::string get_dbstr()
+	{
+	}
+	virtual void init_module(std::vector<std::string>& v)
 	{
 	}
 	void setEnable(bool enable) /* enable or disable the module */

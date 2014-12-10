@@ -116,7 +116,7 @@ int main(int argc,char** argv)
 	//load config
 	configure conf(conf_path);
 	conf.parse_config_file();
-	conf.debug_print();
+	//conf.debug_print();
 
 	//parse opt
 	opt_init(argc,argv,conf);

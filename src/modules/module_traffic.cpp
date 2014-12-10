@@ -64,10 +64,11 @@ public:
 	virtual std::string get_dbstr()
 	{
 		std::ostringstream ss;
-		ss<<"trafficIn = ";
+		ss<<"trafficIn = '";
 		ss<<to_verbose(total_traffic.byteIn);
-		ss<<",trafficOut = ";
+		ss<<"',trafficOut = '";
 		ss<<to_verbose(total_traffic.byteOut);
+		ss<<"'";
 		return ss.str();
 	}
 

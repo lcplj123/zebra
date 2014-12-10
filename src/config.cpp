@@ -52,7 +52,7 @@ configure::configure(const char* filename):
 	db_module_list.clear();
 	confMap.clear();
 	output_interface.clear();
-	
+	process_list.clear();	
 }
 
 configure::~configure()
@@ -60,6 +60,7 @@ configure::~configure()
 	enable_modules_list.clear();
 	db_module_list.clear();
 	output_interface.clear();
+	process_list.clear();
 }
 
 void configure::parse_config_file(std::string path)
@@ -196,7 +197,7 @@ void configure::parse_line()
 			}
 			else
 			{
-				split(iter->second,',',db_module_list);				
+				splitBy(iter->second,',',db_module_list);				
 			}
 		}
 		else if(token == "output_db_addr")
@@ -239,6 +240,10 @@ void configure::parse_line()
 		else if(token == "output_db_index")
 		{
 			db_index = iter->second;
+		}
+		else if(token == "processes")
+		{
+			splitBy(iter->second,',',process_list);
 		}
 		else if(token == "include")
 		{
@@ -336,20 +341,19 @@ void configure::copy_to_db()
 	}
 }
 
-void configure::split(std::string& str,char delim,std::vector<std::string>& v)
+void configure::splitBy(std::string& str,char delim,std::vector<std::string>& v)
 {
 	size_t pos = 0;
 	size_t index = 0;
-	std::cout<<str<<std::endl;
 	while((index = str.find_first_of(delim,pos)) != std::string::npos)
 	{
-		std::string tmp = removeTrim(str.substr(pos,index));
-		if(tmp.compare(0,7,"module_") == 0)
+		std::string tmp = removeTrim(str.substr(pos,index - pos));
+		if(tmp.length() > 0)
 			v.push_back(tmp);
 		pos = index + 1;
 	}
 	std::string tmp = removeTrim(str.substr(pos));
-	if(tmp.compare(0,7,"module_") == 0)
+	if(tmp.length() > 0)
 		v.push_back(tmp);
 }
 

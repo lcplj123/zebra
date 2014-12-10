@@ -63,6 +63,7 @@ bool modmgr::load_modules(std::string path)
 	}
 
 	//std::cout<<"加载模块结束。。。。"<<std::endl;
+	init_modules();
 
 	return true;
 }
@@ -131,7 +132,6 @@ bool modmgr::write_db()
 }
 void modmgr::freemodules()
 {
-
 	std::map<std::string,void*>::iterator iter = so_list.begin();
 	for(; iter != so_list.end();iter++)
 	{
@@ -200,4 +200,14 @@ bool modmgr::write_to_mysql()
 bool modmgr::write_to_url()
 {
 	return true;
+}
+
+void modmgr::init_modules()
+{
+	std::map<std::string,module*>::iterator iter = modules_list.begin();
+	for(; iter != modules_list.end(); iter++)
+	{
+		if(iter->first == "module_process")
+			iter->second->init_module(conf->process_list);
+	}
 }
