@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/zebra.dir/zebra.cpp.o  -o ../bin/zebra -rdynamic libconfig.a 
