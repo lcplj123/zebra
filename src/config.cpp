@@ -187,7 +187,7 @@ void configure::parse_line()
 		}
 		else if(token == "modules_path")
 		{
-			modules_path = iter->second;
+			//modules_path = iter->second;
 		}
 		else if(token == "output_db_modules")
 		{
