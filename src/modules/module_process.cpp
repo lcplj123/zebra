@@ -26,6 +26,7 @@ public:
 	}
 	virtual void init_module(std::vector<std::string>& v)
 	{
+		process_list.clear();
 		std::vector<std::string>::iterator iter = v.begin();
 		for(; iter != v.end(); iter++)
 			process_list.push_back(*iter);
@@ -33,6 +34,7 @@ public:
 	virtual void collect_data()
 	{
 		if(!enable()) return;
+		process_list.clear();
 		std::vector<std::string>::iterator iter = process_list.begin();
 		for(; iter != process_list.end(); iter++)
 		{
