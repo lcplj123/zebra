@@ -1,4 +1,4 @@
-CREATE TABLE hardware (
+CREATE TABLE machineInfo (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(32) NOT NULL,
   provice VARCHAR(32) NOT NULL,
@@ -26,4 +26,4 @@ CREATE TABLE hardware (
   INDEX idx_ip (ip)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
 
-insert into hardware(name,provice,ip,city,cdnid,cpuNum,coreNum,memSum,diskSum,badproc,descs,createtime) values("encode_qd_1","山东",INET_ATON("192.168.240.128"),"青岛",11,1,2,4,20,"nginx","转码机",CURRENT_TIMESTAMP)
+insert into machineInfo(name,provice,ip,city,cdnid,cpuNum,coreNum,memSum,diskSum,badproc,descs,createtime) values("encode_qd_1","山东",INET_ATON("192.168.240.128"),"青岛",11,1,2,4,20,"nginx","转码机",CURRENT_TIMESTAMP)
