@@ -48,7 +48,7 @@ public:
 	virtual std::string get_dbstr()
 	{
 		std::ostringstream ss;
-		ss<<"cpu = ";
+		ss<<"cpuUsage = ";
 		ss<<cpu_usage;
 		return ss.str();
 	}

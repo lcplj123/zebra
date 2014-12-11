@@ -17,7 +17,6 @@ MysqlConn::MysqlConn():
 {
 	_fieldNamePos.clear();
 	_mysql = mysql_init(NULL);
-	std::cout<<"MysqlConn::init........"<<std::endl;
 }
 
 MysqlConn::~MysqlConn()
@@ -26,7 +25,6 @@ MysqlConn::~MysqlConn()
 		mysql_free_result(_result);
 	if(_mysql)
 		mysql_close(_mysql);
-	std::cout<<"MysqlConn::~MysqlConn.........xigou"<<std::endl;
 }
 
 void MysqlConn::setOption(enum mysql_option option, const char* arg)
@@ -68,7 +66,7 @@ MYSQL* MysqlConn::connect(const char* db_ip,unsigned int db_port,const char* db_
 	}
 	else
 	{
-		std::cout<<"connect succeed!...."<<std::endl;
+		//std::cout<<"connect succeed!...."<<std::endl;
 	}
 	return result;
 }

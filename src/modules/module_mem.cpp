@@ -49,7 +49,7 @@ public:
 	virtual std::string get_dbstr()
 	{
 		std::ostringstream ss;
-		ss<<"mem = ";
+		ss<<"memUsage = ";
 		ss<<mem_usage;
 		return ss.str();
 	}

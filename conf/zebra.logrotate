@@ -1,15 +1,15 @@
-/var/log/tsar.data
+/var/log/zebra.data
 {
-monthly
-rotate 120
+weekly
+rotate 3
 create
 nocompress
 nodateext
 notifempty
 prerotate
-/usr/bin/chattr -a /var/log/tsar.data
+/usr/bin/chattr -a /var/log/zebra.data
 endscript
 postrotate
-/usr/bin/chattr +a /var/log/tsar.data
+/usr/bin/chattr +a /var/log/zebra.data
 endscript
 }

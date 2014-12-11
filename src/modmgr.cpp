@@ -10,7 +10,7 @@
 #include "mysqlconn.h"
 //#include "common.h"
 
-//const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/";
+//const char* DEFAULT_MODULES_PATH = "/usr/bin/zebra/modules/";
 const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
 
 modmgr::modmgr(configure* _conf):
@@ -32,19 +32,18 @@ modmgr::~modmgr()
 bool modmgr::load_modules(std::string path)
 {
 	if(conf == NULL) return false;
-	char buf[256] = {0};
+	char buf[256] = {'\0'};
 	std::vector<std::string>::iterator iter = conf->enable_modules_list.begin();
-	//std::cout<<"加载模块中。。。。"<<std::endl;
+	//std::cout<<"加载模块中:"<<conf->modules_path<<std::endl;
 	for(; iter != conf->enable_modules_list.end(); iter++)
 	{
-		memset(buf,0,sizeof(buf));
+		memset(buf,'\0',sizeof(buf));
 		sprintf(buf,"%slib%s.so",DEFAULT_MODULES_PATH,(*iter).c_str());
-		//std::cout<<"当前加载的模块名字："<<buf<<std::endl;
 		//load module lib
 		void* lib = dlopen(buf,RTLD_NOW|RTLD_GLOBAL);
 		if(!lib) 
 		{
-			std::cout<<"加载模块失败。。。"<<lib<<buf<<std::endl;
+			std::cout<<"加载模块失败。。。"<<buf<<std::endl;
 			std::cout<<dlerror()<<std::endl;
 			continue;
 		}
@@ -172,6 +171,7 @@ void modmgr::print_modules()
 
 bool modmgr::write_to_mysql()
 {
+	if(conf->db_module_list.size() <= 0) return false;
 	MysqlConn conn;
 	if(!conn.connect(conf->db_ip.c_str(),conf->db_port,conf->db_user.c_str(),conf->db_passwd.c_str(),conf->db_name.c_str()))
 	{
@@ -191,8 +191,11 @@ bool modmgr::write_to_mysql()
 		sql.append(",");
 	}
 	sql.erase(sql.length()-1,1);
-	sql.append(" where " + conf->db_index + " = " + conf->db_key);
-	std::cout<<"YYYYYYYYYYY "<<sql<<std::endl;
+	sql.append(" where " + conf->db_index + " = '" + conf->db_key + "'");
+	std::cout<<"sql = "<<sql<<std::endl;
+
+	const char* s = sql.c_str();
+	conn.execute(s,strlen(s));
 	
 	return true;
 }

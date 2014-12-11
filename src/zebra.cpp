@@ -123,7 +123,7 @@ int main(int argc,char** argv)
 
 	//load module manager
 	modmgr mgr(&conf);
-	mgr.load_modules();
+	mgr.load_modules(conf.modules_path);
 	mgr.print_modules();
 
 	//start

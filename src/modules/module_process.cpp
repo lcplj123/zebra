@@ -69,8 +69,9 @@ public:
 			result += *iter;
 			result += ',';
 		}
-		result.erase(result.length()-1,1);
-		ss<<"process = '";
+		if(bad_list.size() > 0)
+			result.erase(result.length()-1,1);
+		ss<<"badproc = '";
 		ss<<result;
 		ss<<"'";
 		return ss.str();
