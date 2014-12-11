@@ -1,0 +1,29 @@
+CREATE TABLE hardware (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(32) NOT NULL,
+  provice VARCHAR(32) NOT NULL,
+  ip INT UNSIGNED NOT NULL,
+  city VARCHAR(32) NOT NULL,
+  cdnid INT UNSIGNED NOT NULL,
+  cpuNum SMALLINT UNSIGNED NOT NULL,
+  coreNum SMALLINT UNSIGNED NOT NULL,
+  cpuUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  memSum SMALLINT UNSIGNED NOT NULL,
+  memUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  diskSum INT UNSIGNED NOT NULL,
+  diskUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  trafficIn VARCHAR(32) NOT NULL DEFAULT '0KB',
+  trafficOut VARCHAR(32) NOT NULL DEFAULT '0KB',
+  badproc VARCHAR(128) NOT NULL DEFAULT '',
+  lastUptime TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  ignored TINYINT NOT NULL DEFAULT 0,
+  descs VARCHAR(32) NOT NULL,
+  createtime TIMESTAMP NOT NULL,
+  PRIMARY KEY(id),
+  INDEX idx_provice (provice),
+  UNIQUE INDEX uidx_name (NAME),
+  INDEX idx_desc (descs),
+  INDEX idx_ip (ip)
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
+
+insert into hardware(name,provice,ip,city,cdnid,cpuNum,coreNum,memSum,diskSum,badproc,descs,createtime) values("encode_qd_1","山东",INET_ATON("192.168.240.128"),"青岛",11,1,2,4,20,"nginx","转码机",CURRENT_TIMESTAMP)

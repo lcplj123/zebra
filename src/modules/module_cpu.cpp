@@ -16,12 +16,12 @@ public:
 		module("module_cpu",cpu_howto),
 		cpu_usage(0.0)
 	{
-		std::cout<<"构造cpu模块。。。。"<<std::endl;
+		//std::cout<<"构造cpu模块。。。。"<<std::endl;
 	}
 
 	virtual	~module_cpu()
 	{
-		std::cout<<"析构cpu模块。。。"<<std::endl;
+		//std::cout<<"析构cpu模块。。。"<<std::endl;
 	}
 	virtual void collect_data()
 	{

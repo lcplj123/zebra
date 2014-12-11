@@ -16,13 +16,13 @@ public:
 	{
 		bad_list.clear();
 		process_list.clear();
-		std::cout<<"构造process模块。。。"<<std::endl;
+		//std::cout<<"构造process模块。。。"<<std::endl;
 	}
 	virtual ~module_process()
 	{
 		bad_list.clear();
 		process_list.clear();
-		std::cout<<"析构process模块。。。"<<std::endl;
+		//std::cout<<"析构process模块。。。"<<std::endl;
 	}
 	virtual void init_module(std::vector<std::string>& v)
 	{

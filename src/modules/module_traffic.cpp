@@ -23,12 +23,12 @@ public:
 		module("module_traffic",traffic_howto)
 	{
 		traffic_map.clear();	
-		std::cout<<"构造traffic模块。。。"<<std::endl;
+		//std::cout<<"构造traffic模块。。。"<<std::endl;
 	}
 	virtual ~module_traffic()
 	{
 		traffic_map.clear();
-		std::cout<<"析构traffic模块。。。"<<std::endl;
+		//std::cout<<"析构traffic模块。。。"<<std::endl;
 	}
 
 	virtual void collect_data()
@@ -46,7 +46,7 @@ public:
 		std::map<std::string,traffic_status_s>::iterator iter = traffic_map.begin();
 		for(; iter != traffic_map.end(); iter++)
 		{
-			out<<iter->first<<":"<<iter->second.packetIn<<","<<iter->second.byteOut<<","<<iter->second.packetIn<<","<<iter->second.packetOut<<" ";
+			out<<iter->first<<":"<<iter->second.byteIn<<","<<iter->second.byteOut<<","<<iter->second.packetIn<<","<<iter->second.packetOut<<" ";
 		}
 	}
 

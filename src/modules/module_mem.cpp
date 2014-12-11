@@ -14,12 +14,12 @@ public:
 		module("module_mem",mem_howto),
 		mem_usage(0.0)
 	{
-		std::cout<<"构造mem模块。。。"<<std::endl;
+		//std::cout<<"构造mem模块。。。"<<std::endl;
 	}
 
 	virtual ~module_mem()
 	{
-		std::cout<<"析构mem模块。。。"<<std::endl;
+		//std::cout<<"析构mem模块。。。"<<std::endl;
 	}
 
 	virtual void collect_data()

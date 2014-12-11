@@ -24,11 +24,11 @@ public:
 		disk_usage(0.0)
 	{
 		disk_map.clear();
-		std::cout<<"构造disk模块。。。"<<std::endl;
+		//std::cout<<"构造disk模块。。。"<<std::endl;
 	}
 	virtual ~module_disk()
 	{
-		std::cout<<"析构disk模块。。。"<<std::endl;
+		//std::cout<<"析构disk模块。。。"<<std::endl;
 		disk_map.clear();
 	}
 	

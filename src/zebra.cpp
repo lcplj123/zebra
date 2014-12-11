@@ -16,7 +16,7 @@ enum {
 	PRINT_DETAIL,
 };
 
-const char* DEFAULT_SAVE_FILENAME = "/root/zebra.data";
+const char* DEFAULT_SAVE_FILENAME = "/var/log/zebra.data";
 const char* conf_path = "/root/zebra.conf";
 const char* shortopt = ":lci:";
 struct option longopt[] = {
@@ -40,7 +40,7 @@ void opt_init(int argc,char** argv,configure& conf)
 {
 	int opt = 0;
 	int long_index = 0;
-	std::cout<<"解析输入参数"<<std::endl;
+	//std::cout<<"解析输入参数"<<std::endl;
 	while((opt = getopt_long(argc,argv,shortopt,longopt,&long_index)) != -1)
 	{
 		switch(opt)
@@ -75,13 +75,13 @@ void opt_init(int argc,char** argv,configure& conf)
 				break;
 		}
 	}
-	std::cout<<"解析输入参数 结束"<<std::endl;
+	//std::cout<<"解析输入参数 结束"<<std::endl;
 
 }
 
 void run_cron(configure& conf,modmgr& mgr)
 {
-	std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);	
+	std::ofstream out(conf.output_file_path.c_str(),std::ios::app);	
 	mgr.collect_data();
 	mgr.save_file(out);
 	mgr.write_db();
@@ -92,7 +92,7 @@ void run_live(configure& conf,modmgr& mgr)
 {
 	while(1)
 	{
-		std::ofstream out(DEFAULT_SAVE_FILENAME,std::ios::app);
+		std::ofstream out(conf.output_file_path.c_str(),std::ios::app);
 		mgr.collect_data();
 		std::vector<std::string>::iterator iter = conf.enable_modules_list.begin();
 		for(; iter != conf.enable_modules_list.end(); iter++)
@@ -124,7 +124,7 @@ int main(int argc,char** argv)
 	//load module manager
 	modmgr mgr(&conf);
 	mgr.load_modules(conf.modules_path);
-	mgr.print_modules();
+	//mgr.print_modules();
 
 	//start
 	switch(conf.run_state)
