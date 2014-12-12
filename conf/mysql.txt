@@ -1,29 +1,55 @@
-CREATE TABLE machineInfo (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(32) NOT NULL,
-  provice VARCHAR(32) NOT NULL,
-  ip INT UNSIGNED NOT NULL,
-  city VARCHAR(32) NOT NULL,
-  cdnid INT UNSIGNED NOT NULL,
-  cpuNum SMALLINT UNSIGNED NOT NULL,
-  coreNum SMALLINT UNSIGNED NOT NULL,
-  cpuUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  memSum SMALLINT UNSIGNED NOT NULL,
-  memUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  diskSum INT UNSIGNED NOT NULL,
-  diskUsage TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  trafficIn VARCHAR(32) NOT NULL DEFAULT '0KB',
-  trafficOut VARCHAR(32) NOT NULL DEFAULT '0KB',
-  badproc VARCHAR(128) NOT NULL DEFAULT '',
-  lastUptime TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-  ignored TINYINT NOT NULL DEFAULT 0,
-  descs VARCHAR(32) NOT NULL,
-  createtime TIMESTAMP NOT NULL,
-  PRIMARY KEY(id),
-  INDEX idx_provice (provice),
-  UNIQUE INDEX uidx_name (NAME),
-  INDEX idx_desc (descs),
-  INDEX idx_ip (ip)
+﻿grant all on zebra.* to zreportor@'%' identified by '1234'
+
+CREATE TABLE userInfo (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(32) NOT NULL,
+`email` VARCHAR(40) NOT NULL,
+`phone` VARCHAR(16) NOT NULL DEFAULT '',
+ PRIMARY KEY(`id`),
+ INDEX idx_name(`name`)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
 
-insert into machineInfo(name,provice,ip,city,cdnid,cpuNum,coreNum,memSum,diskSum,badproc,descs,createtime) values("encode_qd_1","山东",INET_ATON("192.168.240.128"),"青岛",11,1,2,4,20,"nginx","转码机",CURRENT_TIMESTAMP)
+insert into userInfo(name,email,phone) values('李长朋','lcplj123@163.com','18310101776')
+
+CREATE TABLE machineInfo (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(32) NOT NULL,
+`province` VARCHAR(32) NOT NULL,
+`ip` INT UNSIGNED NOT NULL,
+`city` VARCHAR(32) NOT NULL,
+`cdnid` INT UNSIGNED NOT NULL,
+`cpuNum` SMALLINT UNSIGNED NOT NULL,
+`coreNum` SMALLINT UNSIGNED NOT NULL,
+`memSum` SMALLINT UNSIGNED NOT NULL,
+`diskSum` SMALLINT UNSIGNED NOT NULL,
+`ignored` TINYINT NOT NULL DEFAULT 0,
+`descs` VARCHAR(32) NOT NULL,
+`sendmail` TINYINT NOT NULL DEFAULT 0,
+`userID` INT UNSIGNED NOT NULL DEFAULT 0,
+`createtime` TIMESTAMP NOT NULL,
+PRIMARY KEY(`id`),
+UNIQUE INDEX idx_name(`name`),
+INDEX idx_provice(`province`),
+INDEX idx_desc(`descs`),
+INDEX idx_ip(`ip`)
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
+
+
+insert into machineInfo(name,province,ip,city,cdnid,cpuNum,coreNum,memSum,diskSum,descs,userID,createtime) values("encode_qd_1","山东",INET_ATON("192.168.240.128"),"青岛",58,2,4,4,200,"转码机",1,CURRENT_TIMESTAMP)
+
+CREATE TABLE hardware (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(32) NOT NULL,
+`cpuUsage` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+`memUsage` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+`diskUsage` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+`trafficIn` VARCHAR(32) NOT NULL DEFAULT '0KB',
+`trafficOut` VARCHAR(32) NOT NULL DEFAULT '0KB',
+`badproc` VARCHAR(128) NOT NULL DEFAULT '',
+`lastUptime` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY(`id`),
+INDEX idx_name(`name`)
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
+
+
+
