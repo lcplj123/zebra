@@ -49,20 +49,16 @@ void opt_init(int argc,char** argv,configure& conf)
 		{
 			case 'c':
 				conf.run_state = RUN_CRON;
-				std::cout<<"run in cron..."<<std::endl;
 				break;
 			case 'l':
 				conf.run_state = RUN_LIVE;
-				std::cout<<"run in live....."<<std::endl;
 				break;
 			case 'd':
 				conf.print_mode = PRINT_DETAIL;
-				std::cout<<"run in detail....."<<std::endl;
 				break;
 			case 'i':
 				break;
 			case 'h':
-				std::cout<<"run in help...."<<std::endl;
 				usage();
 				break;
 			case ':': //缺少选项参数
