@@ -17,7 +17,7 @@ enum {
 };
 
 const char* DEFAULT_SAVE_FILENAME = "/var/log/zebra.data";
-const char* conf_path = "/root/zebra.conf";
+const char* conf_path = "/etc/zebra/zebra.conf";
 const char* shortopt = ":lci:";
 struct option longopt[] = {
 	{"help",no_argument,NULL,'h'},
