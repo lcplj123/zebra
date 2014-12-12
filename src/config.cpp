@@ -353,7 +353,6 @@ void configure::splitBy(std::string& str,char delim,std::vector<std::string>& v)
 		pos = index + 1;
 	}
 	std::string tmp = removeTrim(str.substr(pos));
-	std::cout<<"XXXXXXXXXXXX "<<str<<"  "<<tmp<<std::endl;
 	if(tmp.length() > 0)
 		v.push_back(tmp);
 }
