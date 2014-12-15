@@ -10,6 +10,7 @@ mkdir -p /etc/zebra
 \cp modules/*.so /usr/local/zebra/modules
 #copy bin file
 \cp bin/zebra /usr/bin/zebra
+chmod 777 /usr/bin/zebra
 #copy configure files
 \cp conf/zebra.conf /etc/zebra/zebra.conf
 \cp conf/zebra.logrotate /etc/logrotate.d/zebra
