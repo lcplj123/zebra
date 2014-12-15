@@ -61,6 +61,7 @@ bool modmgr::load_modules(std::string path)
 
 	}
 
+	//print_modules();
 	//std::cout<<"加载模块结束。。。。"<<std::endl;
 	init_modules();
 

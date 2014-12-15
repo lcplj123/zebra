@@ -307,6 +307,11 @@ void configure::debug_print()
 	{
 		std::cout<<*iter3<<",";
 	}
+	std::cout<<std::endl<<"check process: ";
+	for(iter3 = process_list.begin(); iter3 != process_list.end(); iter3++)
+	{
+		std::cout<<" "<<*iter3; 
+	}
 	std::cout<<std::endl;
 
 	
