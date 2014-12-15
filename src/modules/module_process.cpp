@@ -100,6 +100,7 @@ private:
 		{
 			counter++;
 		}
+		pclose(fs);
 		return counter;
 	}
 
