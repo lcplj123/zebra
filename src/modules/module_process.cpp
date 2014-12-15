@@ -34,7 +34,7 @@ public:
 	virtual void collect_data()
 	{
 		if(!enable()) return;
-		process_list.clear();
+		bad_list.clear();
 		std::vector<std::string>::iterator iter = process_list.begin();
 		for(; iter != process_list.end(); iter++)
 		{
