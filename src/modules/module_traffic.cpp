@@ -86,10 +86,11 @@ private:
 	void read_traffic_stat()
 	{
 		std::ifstream fin(NET_DEV);
-		std::string ss;
+		std::string s;
 		traffic_map.clear();
-		while(getline(fin,ss))
+		while(getline(fin,s))
 		{
+			std::string ss = removeLeftTrim(s); 
 			if(0==ss.compare(0,3,"eth")||0==ss.compare(0,2,"em")||0==ss.compare(0,3,"eno")||0==ss.compare(0,5,"venet"))
 			{
 				int index = ss.find(':',0);
@@ -144,6 +145,26 @@ private:
 			std::cout<<iter->first<<":"<<iter->second.byteIn<<" "<<iter->second.byteOut<<" "<<iter->second.packetIn<<" "<<iter->second.packetOut<<std::endl;
 		}
 		std::cout<<"total:"<<total_traffic.byteIn<<" "<<total_traffic.byteOut<<" "<<total_traffic.packetIn<<" "<<total_traffic.packetOut<<std::endl;
+	}
+
+	std::string removeLeftTrim(const std::string& s)
+	{
+		size_t startPos  = getLeftTrimPos(s);
+		return s.substr(startPos,std::string::npos);
+	}
+	size_t getLeftTrimPos(const std::string& s)
+	{
+		size_t pos = 0;
+		std::string::const_iterator iter = s.begin();
+		for(; iter != s.end(); iter++)
+		{
+			if(*iter == ' '|| *iter == '	')
+				pos++;
+			else
+				break;
+
+		}
+		return pos;
 	}
 };
 
