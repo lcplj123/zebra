@@ -35,4 +35,11 @@ ADD_LIBRARY(module_process_shared SHARED ${MODULE_PROCESS_SRC})
 SET_TARGET_PROPERTIES(module_process_static PROPERTIES OUTPUT_NAME "module_process")
 SET_TARGET_PROPERTIES(module_process_shared PROPERTIES OUTPUT_NAME "module_process")
 
+#----------------load---------------------------
+SET(MODULE_LOAD_SRC module_load.cpp)
+ADD_LIBRARY(module_load_static STATIC ${MODULE_LOAD_SRC})
+ADD_LIBRARY(module_load_shared SHARED ${MODULE_LOAD_SRC})
+SET_TARGET_PROPERTIES(module_load_static PROPERTIES OUTPUT_NAME "module_load")
+SET_TARGET_PROPERTIES(module_load_shared PROPERTIES OUTPUT_NAME "module_load")
+
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/modules)

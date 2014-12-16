@@ -10,8 +10,8 @@
 #include "mysqlconn.h"
 //#include "common.h"
 
-const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
-//const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
+//const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
+const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
 
 modmgr::modmgr(configure* _conf):
 	conf(NULL)
@@ -192,7 +192,7 @@ bool modmgr::write_to_mysql()
 		sql.append(",");
 	}
 	sql.erase(sql.length()-1,1);
-	sql.append(" where " + conf->db_index + " = '" + conf->db_key + "'");
+	sql.append(" where " + conf->db_index + " = '" + conf->ip + "'");
 	std::cout<<"sql = "<<sql<<std::endl;
 
 	const char* s = sql.c_str();

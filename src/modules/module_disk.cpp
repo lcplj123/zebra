@@ -37,7 +37,7 @@ public:
 		if(!enable()) return;
 		read_disk_stat();
 		caculate_disk();
-		//debug_print();
+		debug_print();
 	}
 	virtual void save_file(std::ofstream& out)
 	{

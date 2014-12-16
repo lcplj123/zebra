@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <fcntl.h>
 #include "config.h"
+#include "ifaddr.h"
 //#include "common.h"
 
 enum {
@@ -45,14 +46,18 @@ configure::configure(const char* filename):
 	db_passwd(""),
 	db_tabname(""),
 	db_url(""),
-	db_key(""),
-	db_index("")
+	db_index(""),
+	ip("127.0.0.1")
 {
 	enable_modules_list.clear();
 	db_module_list.clear();
 	confMap.clear();
 	output_interface.clear();
 	process_list.clear();	
+	std::string _ip = getinterface();
+	if(_ip != "")
+		ip = _ip;
+
 }
 
 configure::~configure()
@@ -232,10 +237,6 @@ void configure::parse_line()
 		else if(token == "output_url")
 		{
 			db_url = iter->second;	
-		}
-		else if(token == "output_db_key")
-		{
-			db_key = iter->second;
 		}
 		else if(token == "output_db_index")
 		{

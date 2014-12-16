@@ -42,8 +42,8 @@ public:
 	std::string db_passwd; /* db password*/
 	std::string db_tabname; /* table name */
 	std::string db_url; /* database url */
-	std::string db_key; /* means ip or computer name */
 	std::string db_index; /* means the index(column) */
+	std::string ip; /* machine ip address */ 
 	std::vector<std::string> process_list; /* processes that be checked */
 
 private:
