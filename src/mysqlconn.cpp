@@ -77,8 +77,8 @@ void MysqlConn::execute(const char *sql, size_t len)
 	int result = -1;
 	while((result = mysql_real_query(_mysql,sql,len)) != 0)  //执行语句失败
 	{
+		std::cout<<"xxxxxxxxxxxxxxxx  "<<result<<std::endl;
 		retry++;
-		std::cout<<"execute error... reConnect "<<retry<<std::endl;
 		if(retry > 3)  //重试3次，不行退出
 		{
 			break;
@@ -98,7 +98,7 @@ void MysqlConn::execute(const char *sql, size_t len)
 			std::cout<<"eeexecute error..."<<"An unknown error occurred."<<std::endl;
 			break;
 		default:
-			std::cout<<"eeeeeeeeeeeeeeeee..."<<result<<std::endl;
+			std::cout<<"execute error..."<<result<<std::endl;
 		}
 		sleep(retry);  //休眠多少秒 如果是微秒用usleep函数
 		reConnect(); //重新连接

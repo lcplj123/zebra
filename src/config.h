@@ -13,8 +13,10 @@ public:
 	void parse_config_file(std::string path = ""); /* analyze the conf file */
 	bool reload(const char* filename = NULL); /* reload the config */
 	void debug_print();
+	void load_from_db(); /* load conf from remote database*/
 
 public:
+	std::string clientVersion;
 	int run_state; /* running mode */
 	std::string conf_name; /* configure file name */
 	int interval;  /* how many seconds escape in every print  */
@@ -42,7 +44,6 @@ public:
 	std::string db_passwd; /* db password*/
 	std::string db_tabname; /* table name */
 	std::string db_url; /* database url */
-	std::string db_index; /* means the index(column) */
 	std::string ip; /* machine ip address */ 
 	std::vector<std::string> process_list; /* processes that be checked */
 

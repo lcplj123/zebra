@@ -28,7 +28,7 @@ public:
 	virtual void save_file(std::ofstream& out)
 	{
 		if(!enable()) return;
-		out<<"|load:"<<load.loadavg_1<<","<<load.loadavg_5<<","<<load.loadavg_15;
+		out<<"|loadavg:"<<load.loadavg_1<<","<<load.loadavg_5<<","<<load.loadavg_15;
 	}
 	virtual void print(int level)
 	{
@@ -44,7 +44,7 @@ public:
 	virtual std::string get_dbstr()
 	{
 		std::ostringstream ss;
-		ss<<"load = ";
+		ss<<"loadavg = ";
 		ss<<load.loadavg_5;
 		return ss.str();
 	}

@@ -30,6 +30,7 @@ struct option longopt[] = {
 	
 };
 
+const char* CLIENT_VERSION = "0.1";
 
 //参数用法
 void usage()
@@ -114,6 +115,7 @@ int main(int argc,char** argv)
 	//load config
 	configure conf(conf_path);
 	conf.parse_config_file();
+	conf.load_from_db(); //从远程数据库加载参数
 	//conf.debug_print();
 
 	//parse opt

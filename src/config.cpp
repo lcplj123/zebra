@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include "config.h"
 #include "ifaddr.h"
+#include "mysqlconn.h"
 //#include "common.h"
 
 enum {
@@ -29,9 +30,10 @@ enum{
 extern const char* DEFAULT_SAVE_FILENAME;
 extern const char* DEFAULT_CONF_FILENAME;
 extern const char* DEFAULT_MODULES_PATH;
-
+extern const char* CLIENT_VERSION;
 
 configure::configure(const char* filename):
+	clientVersion(CLIENT_VERSION),
 	run_state(RUN_LIVE),
 	conf_name(filename),
 	interval(COLLECT_INTERVAL),
@@ -46,7 +48,6 @@ configure::configure(const char* filename):
 	db_passwd(""),
 	db_tabname(""),
 	db_url(""),
-	db_index(""),
 	ip("127.0.0.1")
 {
 	enable_modules_list.clear();
@@ -57,7 +58,6 @@ configure::configure(const char* filename):
 	std::string _ip = getinterface();
 	if(_ip != "")
 		ip = _ip;
-
 }
 
 configure::~configure()
@@ -88,6 +88,28 @@ void configure::parse_config_file(std::string path)
 	//parse every line
 	parse_line();
 	fin.close();
+}
+
+void configure::load_from_db()
+{
+	MysqlConn conn;
+	if(!conn.connect(db_ip.c_str(),db_port,db_user.c_str(),db_passwd.c_str(),db_name.c_str()))
+	{
+		std::cout<<"load from db error!"<<std::endl;
+		return;
+	}
+	std::string tmp;
+	std::string sql = "select processList from machineinfo where ip = '" + ip + "'";
+	const char* s = sql.c_str();
+	conn.execute(s,strlen(s));
+	conn.getResult();
+	MYSQL_ROW row;
+	if(row = conn.nextRow())
+	{
+		tmp = row[0];
+	}
+	//std::cout<<"ttttttttt "<<tmp<<std::endl;
+	splitBy(tmp,',',process_list);
 }
 
 void configure::getSplit(const std::string& s)
@@ -238,13 +260,9 @@ void configure::parse_line()
 		{
 			db_url = iter->second;	
 		}
-		else if(token == "output_db_index")
-		{
-			db_index = iter->second;
-		}
 		else if(token == "processes")
 		{
-			splitBy(iter->second,',',process_list);
+			//splitBy(iter->second,',',process_list);
 		}
 		else if(token == "include")
 		{

@@ -180,7 +180,7 @@ bool modmgr::write_to_mysql()
 		return false;
 	}
 
-	std::string sql = "update " + conf->db_tabname + " set  ";
+	std::string sql = "update " + conf->db_tabname + " set  clientVersion = '" + conf->clientVersion + "'," ;
 	std::vector<std::string>::iterator iter = conf->db_module_list.begin();
 	for(; iter != conf->db_module_list.end(); iter++)
 	{
@@ -192,7 +192,7 @@ bool modmgr::write_to_mysql()
 		sql.append(",");
 	}
 	sql.erase(sql.length()-1,1);
-	sql.append(" where " + conf->db_index + " = '" + conf->ip + "'");
+	sql.append(" where ip = '" + conf->ip + "'");
 	std::cout<<"sql = "<<sql<<std::endl;
 
 	const char* s = sql.c_str();
