@@ -150,13 +150,12 @@ private:
 		for(; iter != disk_map.end(); iter++)
 		{
 			float tmp = 1.0*(iter->second.blocknum - iter->second.freeblocks)/iter->second.blocknum;
-			oss<<"\""<<iter->first<<"\":"<<(unsigned int)tmp*100<<",";
+			oss<<"\""<<iter->first<<"\":"<<(unsigned int)(tmp*100)<<",";
 			total_disk += iter->second.blocksize*iter->second.blocknum/MB;
 			free_disk += iter->second.freeblocks*iter->second.blocksize/MB;
 		}
 		oss<<"}";
 		diskLoad = oss.str();
-		//std::cout<<"XXXXXXXXXXXX  "<<diskLoad<<std::endl;
 		disk_usage =1.0*(total_disk - free_disk)/total_disk*100.0;
 	}
 	void debug_print()
