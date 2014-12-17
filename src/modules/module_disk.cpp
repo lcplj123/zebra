@@ -149,8 +149,8 @@ private:
 		std::map<std::string,disk_status_s>::iterator iter = disk_map.begin();
 		for(; iter != disk_map.end(); iter++)
 		{
-			unsigned int tmp = (iter->second.blocknum - iter->second.freeblocks)/iter->second.blocknum;
-			oss<<"\""<<iter->first<<"\":"<<tmp<<",";
+			float tmp = 1.0*(iter->second.blocknum - iter->second.freeblocks)/iter->second.blocknum;
+			oss<<"\""<<iter->first<<"\":"<<(unsigned int)tmp*100<<",";
 			total_disk += iter->second.blocksize*iter->second.blocknum/MB;
 			free_disk += iter->second.freeblocks*iter->second.blocksize/MB;
 		}
