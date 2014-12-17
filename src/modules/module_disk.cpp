@@ -21,7 +21,8 @@ public:
 		module("module_disk",disk_howto),
 		total_disk(0),
 		free_disk(0),
-		disk_usage(0.0)
+		disk_usage(0.0),
+		diskLoad("")
 	{
 		disk_map.clear();
 		//std::cout<<"构造disk模块。。。"<<std::endl;
@@ -60,6 +61,7 @@ public:
 		std::ostringstream ss;
 		ss<<"diskUsage = ";
 		ss<<disk_usage;
+		ss<<", diskLoad = '"<<diskLoad<<"'";
 		return ss.str();
 	}
 
@@ -76,6 +78,7 @@ private:
 	unsigned long long total_disk; /* in MB */
 	unsigned long long free_disk; /* in MB */
 	float disk_usage;
+	std::string diskLoad;
 
 private:
 	void read_disk_stat()
@@ -141,12 +144,19 @@ private:
 	{
 		total_disk = 0;
 		free_disk = 0;
+		std::ostringstream oss;
+		oss<<"{";
 		std::map<std::string,disk_status_s>::iterator iter = disk_map.begin();
 		for(; iter != disk_map.end(); iter++)
 		{
+			unsigned int tmp = (iter->second.blocknum - iter->second.freeblocks)/iter->second.blocknum;
+			oss<<"\""<<iter->first<<"\":"<<tmp<<",";
 			total_disk += iter->second.blocksize*iter->second.blocknum/MB;
 			free_disk += iter->second.freeblocks*iter->second.blocksize/MB;
 		}
+		oss<<"}";
+		diskLoad = oss.str();
+		//std::cout<<"XXXXXXXXXXXX  "<<diskLoad<<std::endl;
 		disk_usage =1.0*(total_disk - free_disk)/total_disk*100.0;
 	}
 	void debug_print()
@@ -163,6 +173,7 @@ private:
 			std::cout<<"nodenum    = "<<iter->second.nodenum<<std::endl;
 			std::cout<<"freenodes  = "<<iter->second.freenodes<<std::endl;
 		}
+		std::cout<<"diskLoad = "<<diskLoad<<std::endl;
 	}
 };
 
