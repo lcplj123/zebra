@@ -26,6 +26,7 @@ struct option longopt[] = {
 	{"detail",no_argument,NULL,'d'},
 	{"cron",no_argument,NULL,'c'},
 	{"live",no_argument,NULL,'l'},
+	{"version",no_argument,NULL,'V'},
 	{0,0,0,0},
 	
 };
@@ -35,11 +36,18 @@ const char* CLIENT_VERSION = "0.1";
 //参数用法
 void usage()
 {
-	std::cout<<"用法："<<std::endl;
+	std::cout<<"用法如下："<<std::endl;
+	std::cout<<"--help "<<"获取帮助信息"<<std::endl;
+	std::cout<<"--cron "<<"以计划任务运行程序"<<std::endl;
+	std::cout<<"--live "<<"以现场模式运行程序"<<std::endl;
+	std::cout<<"--version "<<"获取客户端版本"<<std::endl;
+	std::cout<<"--detail "<<"展示详细信息，默认是概要信息"<<std::endl;
+	std::cout<<"-c "<<"以计划任务运行程序"<<std::endl;
+	std::cout<<"-l "<<"以现场模式运行程序"<<std::endl;
 }
 
 //输入参数处理
-void opt_init(int argc,char** argv,configure& conf)
+bool opt_init(int argc,char** argv,configure& conf)
 {
 	int opt = 0;
 	int long_index = 0;
@@ -61,21 +69,28 @@ void opt_init(int argc,char** argv,configure& conf)
 				break;
 			case 'h':
 				usage();
+				return false;
+				break;
+			case 'V':
+				std::cout<<CLIENT_VERSION<<std::endl;
+				return false;
 				break;
 			case ':': //缺少选项参数
 				std::cout<<"缺少参数。。。"<<std::endl;
 				conf.run_state = RUN_NULL;
 				usage();
+				return false;
 				break;
 			case '?': //包含无效选项
 				std::cout<<"包含无效选项"<<std::endl;
 				conf.run_state = RUN_NULL;
 				usage();
+				return false;
 				break;
 		}
 	}
 	//std::cout<<"解析输入参数 结束"<<std::endl;
-
+	return true;
 }
 
 void run_cron(configure& conf,modmgr& mgr)
@@ -119,7 +134,8 @@ int main(int argc,char** argv)
 	//conf.debug_print();
 
 	//parse opt
-	opt_init(argc,argv,conf);
+	if(!opt_init(argc,argv,conf))
+		return 0;
 
 	//load module manager
 	modmgr mgr(&conf);
