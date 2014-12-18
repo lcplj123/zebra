@@ -39,6 +39,7 @@ UNIQUE INDEX idx_ip(`ip`)
 CREATE TABLE hardware (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `ip` VARCHAR(32) NOT NULL,
+`status` TINYINT NOT NULL DEFAULT 1,
 `loadavg` FLOAT NOT NULL DEFAULT 0.0,
 `cpuUsage` TINYINT UNSIGNED NOT NULL DEFAULT 0,
 `memUsage` TINYINT UNSIGNED NOT NULL DEFAULT 0,
@@ -52,3 +53,16 @@ CREATE TABLE hardware (
 PRIMARY KEY(`id`),
 UNIQUE INDEX idx_ip(`ip`)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
+
+
+//为了便于查询机器的状态,需要增加触发器，可以自动更改status的状态。
+
+DELIMITER $$
+CREATE
+	TRIGGER `zebra`.`t1` AFTER UPDATE
+	ON `zebra`.`hardware`
+	FOR EACH ROW BEGIN
+	UPDATE `hardware` SET `status` = 1;
+	UPDATE `hardware` SET `status` = 0 WHERE `lastUptime` < NOW() - 300 OR badproc != '' OR diskUsage >= 95;
+	END$$
+DELIMITER ;
