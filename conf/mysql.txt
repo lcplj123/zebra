@@ -25,7 +25,6 @@ CREATE TABLE machineInfo (
 `ignored` TINYINT NOT NULL DEFAULT 0,
 `descs` VARCHAR(32) NOT NULL,
 `processList` VARCHAR(64) NOT NULL DEFAULT '',
-`sendmail` TINYINT NOT NULL DEFAULT 0,
 `userID` INT UNSIGNED NOT NULL DEFAULT 0,
 `createtime` TIMESTAMP NOT NULL,
 PRIMARY KEY(`id`),
@@ -50,6 +49,7 @@ CREATE TABLE hardware (
 `badproc` VARCHAR(128) NOT NULL DEFAULT '',
 `lastUptime` TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
 `clientVersion` VARCHAR(16) NOT NULL DEFAULT '',
+`sendmail` TINYINT NOT NULL DEFAULT 0,
 PRIMARY KEY(`id`),
 UNIQUE INDEX idx_ip(`ip`)
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8
@@ -67,6 +67,9 @@ CREATE
 	END IF;
 	IF @lastUptime < NOW() - 300 OR @badproc != '' OR @diskUsage >= 95 THEN
 	SET @status = 500;
+	END IF;
+	IF @sendEmail = 1 AND @status = 200 THEN
+	SET @sendEmail = 0;
 	END IF;
 	END$$
 DELIMITER ;
