@@ -62,7 +62,11 @@ CREATE
 	TRIGGER `zebra`.`t1` AFTER UPDATE
 	ON `zebra`.`hardware`
 	FOR EACH ROW BEGIN
-	UPDATE `hardware` SET `status` = 1;
-	UPDATE `hardware` SET `status` = 0 WHERE `lastUptime` < NOW() - 300 OR badproc != '' OR diskUsage >= 95;
+	IF @status != 200 THEN
+	SET @status = 200;
+	END IF;
+	IF @lastUptime < NOW() - 300 OR @badproc != '' OR @diskUsage >= 95 THEN
+	SET @status = 500;
+	END IF;
 	END$$
 DELIMITER ;
