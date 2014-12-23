@@ -43,7 +43,7 @@ SET_TARGET_PROPERTIES(ifaddr_shared PROPERTIES OUTPUT_NAME "ifaddr")
 SET(ZEBRA_SRC zebra.cpp)
 ADD_EXECUTABLE(zebra ${ZEBRA_SRC})
 LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/src)
-TARGET_LINK_LIBRARIES(zebra modmgr_static common_static config_static common_static mysqlconn_static)
+TARGET_LINK_LIBRARIES(zebra modmgr_static common_static config_static common_static mysqlconn_static curl)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 

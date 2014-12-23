@@ -30,6 +30,13 @@ private:
 	bool write_to_mysql(); /* 写到mysql数据 */
 	bool write_to_url(); /* 写到url */
 	void init_modules(); /* 部分模块需要初始化，比如进程监控模块，需要给出监控的进程列表 */
+	std::string genSQL();
+	/**
+	 * buffer:数据缓冲区指针
+	 * nmemb:(memory block)代表此处接受的内存块的长度
+	 * lpVoid: 用户自定义的参数
+	 * */
+	static size_t write_callback(void* buffer,size_t size,size_t nmemb,void* userData); /* post回调接口 */
 };
 
 #endif  // _MODULE_MGR_H__

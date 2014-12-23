@@ -4,14 +4,15 @@
 #include <cstdio>
 #include <dlfcn.h>
 #include <ctime>
+#include <curl/curl.h>
 #include "modmgr.h"
 #include "config.h"
 #include "module.h"
 #include "mysqlconn.h"
 //#include "common.h"
 
-const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
-//const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
+//const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
+const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
 
 modmgr::modmgr(configure* _conf):
 	conf(NULL)
@@ -170,16 +171,8 @@ void modmgr::print_modules()
 
 }
 
-bool modmgr::write_to_mysql()
+std::string modmgr::genSQL()
 {
-	if(conf->db_module_list.size() <= 0) return false;
-	MysqlConn conn;
-	if(!conn.connect(conf->db_ip.c_str(),conf->db_port,conf->db_user.c_str(),conf->db_passwd.c_str(),conf->db_name.c_str()))
-	{
-		std::cout<<"connect mysql error!"<<std::endl;
-		return false;
-	}
-
 	std::string sql = "update " + conf->db_tabname + " set  clientVersion = '" + conf->clientVersion + "'," ;
 	std::vector<std::string>::iterator iter = conf->db_module_list.begin();
 	for(; iter != conf->db_module_list.end(); iter++)
@@ -194,7 +187,19 @@ bool modmgr::write_to_mysql()
 	sql.erase(sql.length()-1,1);
 	sql.append(" where ip = '" + conf->ip + "'");
 	std::cout<<"sql = "<<sql<<std::endl;
+	return sql;
+}
 
+bool modmgr::write_to_mysql()
+{
+	if(conf->db_module_list.size() <= 0) return false;
+	MysqlConn conn;
+	if(!conn.connect(conf->db_ip.c_str(),conf->db_port,conf->db_user.c_str(),conf->db_passwd.c_str(),conf->db_name.c_str()))
+	{
+		std::cout<<"connect mysql error!"<<std::endl;
+		return false;
+	}
+	std::string sql = genSQL();
 	const char* s = sql.c_str();
 	conn.execute(s,strlen(s));
 	
@@ -203,6 +208,37 @@ bool modmgr::write_to_mysql()
 
 bool modmgr::write_to_url()
 {
+	CURL* easy_handle = NULL;
+	CURLcode retcode;
+	curl_global_init(CURL_GLOBAL_ALL);
+	easy_handle = curl_easy_init();
+	if(NULL == easy_handle)
+	{
+		std::cout<<"curl init error...."<<std::endl;
+		curl_global_cleanup();
+		return false;
+	}
+
+	std::string strPost = "sql=" + genSQL();
+	curl_easy_setopt(easy_handle,CURLOPT_URL,conf->db_url.c_str());
+	curl_easy_setopt(easy_handle,CURLOPT_POST,1);
+	curl_easy_setopt(easy_handle,CURLOPT_POSTFIELDS,strPost.c_str());
+	curl_easy_setopt(easy_handle,CURLOPT_CONNECTTIMEOUT,5);
+	//curl_easy_setopt(easy_handle,CURLOPT_WRITEFUNCTION,write_callback); //设置接收到HTTP服务器的数据时调用的回调函数
+	//curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,NULL); //设置回调函数的第四个参数
+
+	retcode = curl_easy_perform(easy_handle);
+	if(CURLE_OK != retcode)
+	{
+		std::cout<<"curl perform error...."<<retcode<<std::endl;
+		curl_easy_cleanup(easy_handle);
+		curl_global_cleanup();
+		return false;
+	}
+
+	curl_easy_cleanup(easy_handle); 
+	curl_global_cleanup();
+
 	return true;
 }
 
@@ -214,4 +250,9 @@ void modmgr::init_modules()
 		if(iter->first == "module_process")
 			iter->second->init_module(conf->process_list);
 	}
+}
+
+size_t modmgr::write_callback(void* buffer,size_t size,size_t nmemb,void* userData)
+{
+	return 0;
 }
