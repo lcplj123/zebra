@@ -106,7 +106,6 @@ private:
 
 	void debug_print()
 	{
-
 	}
 };
 
