@@ -1,4 +1,5 @@
-﻿grant all on zebra.* to zreportor@'%' identified by '1234'
+﻿create database zebra;
+grant all on zebra.* to zreportor@'%' identified by '1234'
 
 CREATE TABLE userInfo (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

@@ -11,8 +11,8 @@
 #include "mysqlconn.h"
 //#include "common.h"
 
-const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
-//const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
+//const char* DEFAULT_MODULES_PATH = "/usr/local/zebra/modules/";
+const char* DEFAULT_MODULES_PATH = "/root/git/zebra/build/modules/";
 
 modmgr::modmgr(configure* _conf):
 	conf(NULL)
@@ -219,7 +219,7 @@ bool modmgr::write_to_url()
 		return false;
 	}
 
-	std::string strPost = "sql=" + genSQL();
+	std::string strPost = "op=update&sql=" + genSQL();
 	curl_easy_setopt(easy_handle,CURLOPT_URL,conf->db_url.c_str());
 	curl_easy_setopt(easy_handle,CURLOPT_POST,1);
 	curl_easy_setopt(easy_handle,CURLOPT_POSTFIELDS,strPost.c_str());
