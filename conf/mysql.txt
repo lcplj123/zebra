@@ -1,7 +1,7 @@
 ﻿create database zebra;
 grant all on zebra.* to zreportor@'%' identified by '1234'
 
-CREATE TABLE userInfo (
+CREATE TABLE userinfo (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(32) NOT NULL,
 `email` VARCHAR(40) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE userInfo (
 
 insert into userInfo(name,email,phone) values('李长朋','lichangpeng@ku6.com','18310101776')
 
-CREATE TABLE machineInfo (
+CREATE TABLE machineinfo (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(32) NOT NULL,
 `province` VARCHAR(32) NOT NULL,

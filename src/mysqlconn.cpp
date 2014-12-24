@@ -77,7 +77,7 @@ void MysqlConn::execute(const char *sql, size_t len)
 	int result = -1;
 	while((result = mysql_real_query(_mysql,sql,len)) != 0)  //执行语句失败
 	{
-		std::cout<<"xxxxxxxxxxxxxxxx  "<<result<<std::endl;
+		std::cout<<"xxxxxxxxxxxxxxxx  "<<sql<<std::endl;
 		retry++;
 		if(retry > 3)  //重试3次，不行退出
 		{
