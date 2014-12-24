@@ -33,19 +33,30 @@ class UpdateHandler(tornado.web.RequestHandler):
 			return
 		db.execute(sql);
 		self.write("{'status':200}")
+
+class ProcessHandler(tornado.web.RequestHandler):
+	def get(self):
+		proclist = self.get_argument("proclist")
+		print(proclist)
+	def post(self):
+		ip = self.get_argument("ip")
+		print(ip)
+		self.write("aaaaaaa")
+
 			
 if __name__ == "__main__":
 	handlers = [
 		(r"/",IndexHandler),
 		(r"/monitor/hardware",UpdateHandler),
+		(r"/monitor/request/proclist",ProcessHandler),
 	]
 
-	db = torndb.Connection(
-		host = my_host,
-		database = my_db,
-		user = my_user,
-		password = my_pwd,
-	)
+	#db = torndb.Connection(
+	#	host = my_host,
+	#	database = my_db,
+	#	user = my_user,
+	#	password = my_pwd,
+	#)
 	
 	app = tornado.web.Application(handlers)
 	app.listen(http_port)
