@@ -37,18 +37,22 @@ class UpdateHandler(tornado.web.RequestHandler):
 class ProcessHandler(tornado.web.RequestHandler):
 	def get(self):
 		ip = self.get_argument("ip")
-		print(ip)
 		sql =' select processList from machineinfo where ip = %s'
 		result = db.get(sql,ip)
+		if result is None:
+			self.write("")
+		else:
+			self.write(result.get("processList",""))
 		print(result)
-		self.write("bbbbbbbbb")
 	def post(self):
 		ip = self.get_argument("ip")
 		sql = 'select processList from machineinfo where ip = %s'
 		result = db.get(sql,ip)
+		if result is None:
+			self.write("");
+		else:
+			self.write(result.get("processList",""))
 		print(result)
-		print(ip)
-		self.write("aaaaaaa")
 
 			
 if __name__ == "__main__":
