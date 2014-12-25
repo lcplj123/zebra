@@ -14,6 +14,7 @@ public:
 	bool reload(const char* filename = NULL); /* reload the config */
 	void debug_print();
 	void load_from_db(); /* load conf from remote database*/
+	void load_from_url(); /* load conf from remote url */
 
 public:
 	std::string clientVersion;
@@ -57,6 +58,7 @@ private:
 	void parse_module(std::string token,std::string value); /* parse module item  */
 	void copy_to_db(); /* copy all enable module list to db_module_list */
 	void splitBy(std::string& str,char delim,std::vector<std::string>& v); /*split the given string*/
+	static size_t write_callback(void* buff,size_t size,size_t nmemb,void* userdata); //callback function
 
 };
 

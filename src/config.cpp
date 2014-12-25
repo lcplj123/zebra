@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <fcntl.h>
+#include <curl/curl.h>
 #include "config.h"
 #include "ifaddr.h"
 #include "mysqlconn.h"
@@ -31,6 +32,7 @@ extern const char* DEFAULT_SAVE_FILENAME;
 extern const char* DEFAULT_CONF_FILENAME;
 extern const char* DEFAULT_MODULES_PATH;
 extern const char* CLIENT_VERSION;
+const char* process_url = "http://122.11.33.188:5678/monitor/request/proclist";
 
 configure::configure(const char* filename):
 	clientVersion(CLIENT_VERSION),
@@ -110,6 +112,38 @@ void configure::load_from_db()
 	}
 	//std::cout<<"ttttttttt "<<tmp<<std::endl;
 	splitBy(tmp,',',process_list);
+}
+
+void configure::load_from_url()
+{
+	CURL* easy_handle = NULL;
+	CURLcode retcode;
+	curl_global_init(CURL_GLOBAL_ALL);
+	easy_handle = curl_easy_init();
+	if(NULL == easy_handle)
+	{
+		std::cout<<"configure::init curl error!"<<std::endl;
+		curl_global_cleanup();
+		return;
+	}
+	curl_easy_setopt(easy_handle,CURLOPT_URL,process_url);
+	curl_easy_setopt(easy_handle,CURLOPT_POST,1);
+	std::string post = "ip="+ip;
+	curl_easy_setopt(easy_handle,CURLOPT_POSTFIELDS,post.c_str());
+	curl_easy_setopt(easy_handle,CURLOPT_CONNECTTIMEOUT,5);
+	curl_easy_setopt(easy_handle,CURLOPT_WRITEFUNCTION,write_callback);
+	curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,NULL);
+	retcode = curl_easy_perform(easy_handle);
+	if(CURLE_OK != retcode)
+	{
+		std::cout<<"configure:curl perform error.."<<post.c_str()<<std::endl;
+		curl_easy_cleanup(easy_handle);
+		curl_global_cleanup();
+		return;
+	
+	}
+	curl_easy_cleanup(easy_handle); 
+	curl_global_cleanup();
 }
 
 void configure::getSplit(const std::string& s)
@@ -379,6 +413,13 @@ void configure::splitBy(std::string& str,char delim,std::vector<std::string>& v)
 	std::string tmp = removeTrim(str.substr(pos));
 	if(tmp.length() > 0)
 		v.push_back(tmp);
+}
+
+size_t configure::write_callback(void* buff,size_t size,size_t nmemb,void* userdata)
+{
+	std::cout<<"nnnnnnn  "<<(char*)buff<<std::endl;
+	std::string tmp((char*)buff);
+	return size*nmemb;
 }
 
 // for test use

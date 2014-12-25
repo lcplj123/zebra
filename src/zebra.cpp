@@ -130,7 +130,8 @@ int main(int argc,char** argv)
 	//load config
 	configure conf(conf_path);
 	conf.parse_config_file();
-	conf.load_from_db(); //从远程数据库加载参数
+	//conf.load_from_db(); //从远程数据库加载参数
+	conf.load_from_url(); //从远程url加载参数
 	//conf.debug_print();
 
 	//parse opt

@@ -10,7 +10,7 @@ SET_TARGET_PROPERTIES(common_shared PROPERTIES OUTPUT_NAME "common")
 SET(CONFIG_SRC config.cpp)
 ADD_LIBRARY(config_static STATIC ${CONFIG_SRC})
 ADD_LIBRARY(config_shared SHARED ${CONFIG_SRC})
-TARGET_LINK_LIBRARIES(config_static ifaddr_static)
+TARGET_LINK_LIBRARIES(config_static ifaddr_static curl)
 SET_TARGET_PROPERTIES(config_static PROPERTIES OUTPUT_NAME "config")
 SET_TARGET_PROPERTIES(config_shared PROPERTIES OUTPUT_NAME "config")
 
