@@ -40,6 +40,9 @@ class ProcessHandler(tornado.web.RequestHandler):
 		print(proclist)
 	def post(self):
 		ip = self.get_argument("ip")
+		sql = 'select processList from machineinfo where ip = %s'
+		result = db.get(sql,ip)
+		print(result)
 		print(ip)
 		self.write("aaaaaaa")
 
