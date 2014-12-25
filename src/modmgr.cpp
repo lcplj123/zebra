@@ -224,8 +224,8 @@ bool modmgr::write_to_url()
 	curl_easy_setopt(easy_handle,CURLOPT_POST,1);
 	curl_easy_setopt(easy_handle,CURLOPT_POSTFIELDS,strPost.c_str());
 	curl_easy_setopt(easy_handle,CURLOPT_CONNECTTIMEOUT,5);
-	//curl_easy_setopt(easy_handle,CURLOPT_WRITEFUNCTION,write_callback); //设置接收到HTTP服务器的数据时调用的回调函数
-	//curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,NULL); //设置回调函数的第四个参数
+	curl_easy_setopt(easy_handle,CURLOPT_WRITEFUNCTION,write_callback); //设置接收到HTTP服务器的数据时调用的回调函数
+	curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,NULL); //设置回调函数的第四个参数
 
 	retcode = curl_easy_perform(easy_handle);
 	if(CURLE_OK != retcode)
@@ -254,5 +254,6 @@ void modmgr::init_modules()
 
 size_t modmgr::write_callback(void* buffer,size_t size,size_t nmemb,void* userData)
 {
-	return 0;
+	std::cout<<"vvvvvvvv  "<<(char*)buff<<std::endl;
+	return size*nmemb;
 }
