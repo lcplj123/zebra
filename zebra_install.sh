@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "start installing..."
+yum install openssl libcurl -y
 HOST="http://119.167.216.80/zebra"
 wget $HOST/zebra.tar.gz
 
