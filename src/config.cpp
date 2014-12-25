@@ -116,6 +116,7 @@ void configure::load_from_db()
 
 void configure::load_from_url()
 {
+	std::string tmp = "";
 	CURL* easy_handle = NULL;
 	CURLcode retcode;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -132,7 +133,7 @@ void configure::load_from_url()
 	curl_easy_setopt(easy_handle,CURLOPT_POSTFIELDS,post.c_str());
 	curl_easy_setopt(easy_handle,CURLOPT_CONNECTTIMEOUT,5);
 	curl_easy_setopt(easy_handle,CURLOPT_WRITEFUNCTION,write_callback);
-	curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,NULL);
+	curl_easy_setopt(easy_handle,CURLOPT_WRITEDATA,&tmp);
 	retcode = curl_easy_perform(easy_handle);
 	if(CURLE_OK != retcode)
 	{
@@ -144,6 +145,8 @@ void configure::load_from_url()
 	}
 	curl_easy_cleanup(easy_handle); 
 	curl_global_cleanup();
+	splitBy(tmp,',',process_list);	
+	
 }
 
 void configure::getSplit(const std::string& s)
@@ -415,10 +418,10 @@ void configure::splitBy(std::string& str,char delim,std::vector<std::string>& v)
 		v.push_back(tmp);
 }
 
-size_t configure::write_callback(void* buff,size_t size,size_t nmemb,void* userdata)
+size_t configure::write_callback(void* buff,size_t size,size_t nmemb,std::string* userdata)
 {
-	std::cout<<"nnnnnnn  "<<(char*)buff<<std::endl;
 	std::string tmp((char*)buff);
+	userdata->append((char*)buff,size*nmemb);
 	return size*nmemb;
 }
 
