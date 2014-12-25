@@ -252,7 +252,7 @@ void modmgr::init_modules()
 	}
 }
 
-size_t modmgr::write_callback(void* buffer,size_t size,size_t nmemb,void* userData)
+size_t modmgr::write_callback(void* buff,size_t size,size_t nmemb,void* userData)
 {
 	std::cout<<"vvvvvvvv  "<<(char*)buff<<std::endl;
 	return size*nmemb;
