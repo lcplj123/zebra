@@ -36,8 +36,12 @@ class UpdateHandler(tornado.web.RequestHandler):
 
 class ProcessHandler(tornado.web.RequestHandler):
 	def get(self):
-		proclist = self.get_argument("proclist")
-		print(proclist)
+		ip = self.get_argument("ip")
+		print(ip)
+		sql =' select processList from machineinfo where ip = %s'
+		result = db.get(sql,ip)
+		print(result)
+		self.write("bbbbbbbbb")
 	def post(self):
 		ip = self.get_argument("ip")
 		sql = 'select processList from machineinfo where ip = %s'
@@ -54,12 +58,12 @@ if __name__ == "__main__":
 		(r"/monitor/request/proclist",ProcessHandler),
 	]
 
-	#db = torndb.Connection(
-	#	host = my_host,
-	#	database = my_db,
-	#	user = my_user,
-	#	password = my_pwd,
-	#)
+	db = torndb.Connection(
+		host = my_host,
+		database = my_db,
+		user = my_user,
+		password = my_pwd,
+	)
 	
 	app = tornado.web.Application(handlers)
 	app.listen(http_port)
