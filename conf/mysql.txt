@@ -59,18 +59,20 @@ UNIQUE INDEX idx_ip(`ip`)
 //为了便于查询机器的状态,需要增加触发器，可以自动更改status的状态。
 
 DELIMITER $$
+
 CREATE
-	TRIGGER `zebra`.`t1` AFTER UPDATE
-	ON `zebra`.`hardware`
-	FOR EACH ROW BEGIN
-	IF @status != 200 THEN
-	SET @status = 200;
-	END IF;
-	IF @lastUptime < NOW() - 300 OR @badproc != '' OR @diskUsage >= 95 THEN
-	SET @status = 500;
-	END IF;
-	IF @sendEmail = 1 AND @status = 200 THEN
-	SET @sendEmail = 0;
-	END IF;
-	END$$
+    /*[DEFINER = { user | CURRENT_USER }]*/
+    TRIGGER `zebra`.`t1` AFTER UPDATE
+    ON `zebra`.`hardware`
+    FOR EACH ROW BEGIN
+    IF @badproc != '' OR @diskUsage >=95 THEN
+    SET @status = 500;
+    ELSE
+    SET @status = 200;
+    END IF;
+    IF @sendEmail = 1 AND @status = 200 THEN
+    SET @sendEmail = 0;
+    END IF;
+    END$$
+
 DELIMITER ;
