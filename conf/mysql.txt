@@ -62,16 +62,13 @@ DELIMITER $$
 
 CREATE
     /*[DEFINER = { user | CURRENT_USER }]*/
-    TRIGGER `zebra`.`t1` AFTER UPDATE
+    TRIGGER `zebra`.`t1` BEFORE UPDATE
     ON `zebra`.`hardware`
     FOR EACH ROW BEGIN
-    IF @badproc != '' OR @diskUsage >=95 THEN
-    SET @status = 500;
+    IF NEW.badproc != ''  OR NEW.diskUsage >95 THEN
+    SET NEW.status = 500;
     ELSE
-    SET @status = 200;
-    END IF;
-    IF @sendEmail = 1 AND @status = 200 THEN
-    SET @sendEmail = 0;
+    SET NEW.status = 200;
     END IF;
     END$$
 
